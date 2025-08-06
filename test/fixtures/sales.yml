@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  clothing_item: one
+  buyer_name: MyString
+  address: MyString
+  delivery_status: MyString
+
+two:
+  clothing_item: two
+  buyer_name: MyString
+  address: MyString
+  delivery_status: MyString

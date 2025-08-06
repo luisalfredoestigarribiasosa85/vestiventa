@@ -1,0 +1,26 @@
+<div id="<%= dom_id clothing_item %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Nombre del producto:</strong>
+    <%= clothing_item.name %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Tamaño:</strong>
+    <%= clothing_item.size %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Color:</strong>
+    <%= clothing_item.color %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Precio:</strong>
+    <%= clothing_item.price %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Dueño de la Prenda:</strong>
+    <%= clothing_item.owner_name %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Vendido:</strong>
+    <%= clothing_item.sold? ? "Yes" : "No" %>
+  </div>
+</div>

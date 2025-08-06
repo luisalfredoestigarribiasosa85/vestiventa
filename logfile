@@ -1,0 +1,54 @@
+2025-08-05 19:27:34.566 -03 [15868] FATAL:  lock file "postmaster.pid" already exists
+2025-08-05 19:27:34.566 -03 [15868] HINT:  Is another postmaster (PID 10939) running in data directory "/home/luis-estigarribia/.asdf/installs/postgres/17.2/data"?
+2025-08-05 19:28:00.917 -03 [16279] LOG:  starting PostgreSQL 17.2 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit
+2025-08-05 19:28:00.918 -03 [16279] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-08-05 19:28:00.920 -03 [16279] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-08-05 19:28:00.930 -03 [16283] LOG:  database system was shut down at 2025-08-05 19:27:55 -03
+2025-08-05 19:28:00.952 -03 [16279] LOG:  database system is ready to accept connections
+2025-08-05 19:28:08.432 -03 [16462] ERROR:  relation "users" already exists
+2025-08-05 19:28:08.432 -03 [16462] STATEMENT:  CREATE TABLE "users" ("id" bigserial primary key, "email" character varying DEFAULT '' NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "reset_password_token" character varying, "reset_password_sent_at" timestamp(6), "remember_created_at" timestamp(6), "name" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL) /*application='Vestiventa'*/
+2025-08-05 19:32:37.165 -03 [19853] ERROR:  database "vestiventa_development" already exists
+2025-08-05 19:32:37.165 -03 [19853] STATEMENT:  CREATE DATABASE "vestiventa_development" ENCODING = 'unicode' /*application='Vestiventa'*/
+2025-08-05 19:32:37.226 -03 [19856] ERROR:  database "vestiventa_test" already exists
+2025-08-05 19:32:37.226 -03 [19856] STATEMENT:  CREATE DATABASE "vestiventa_test" ENCODING = 'unicode' /*application='Vestiventa'*/
+2025-08-05 19:32:45.854 -03 [20297] ERROR:  relation "users" already exists
+2025-08-05 19:32:45.854 -03 [20297] STATEMENT:  CREATE TABLE "users" ("id" bigserial primary key, "email" character varying DEFAULT '' NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "reset_password_token" character varying, "reset_password_sent_at" timestamp(6), "remember_created_at" timestamp(6), "name" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL) /*application='Vestiventa'*/
+2025-08-05 19:33:01.030 -03 [16281] LOG:  checkpoint starting: time
+2025-08-05 19:33:03.068 -03 [16281] LOG:  checkpoint complete: wrote 22 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.029 s, sync=0.002 s, total=2.038 s; sync files=23, longest=0.001 s, average=0.001 s; distance=84 kB, estimate=84 kB; lsn=0/1222C0E8, redo lsn=0/1222C090
+2025-08-05 19:38:01.165 -03 [16281] LOG:  checkpoint starting: time
+2025-08-05 19:38:06.126 -03 [16281] LOG:  checkpoint complete: wrote 50 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.954 s, sync=0.001 s, total=4.962 s; sync files=42, longest=0.001 s, average=0.001 s; distance=218 kB, estimate=218 kB; lsn=0/12262C38, redo lsn=0/12262BA8
+2025-08-05 19:38:13.190 -03 [22158] FATAL:  role "root" does not exist
+2025-08-05 19:38:31.821 -03 [22194] FATAL:  role "root" does not exist
+2025-08-05 19:39:56.580 -03 [22270] FATAL:  role "vestiventa" does not exist
+2025-08-05 19:40:26.449 -03 [22303] FATAL:  role "vestiventa" does not exist
+2025-08-05 19:43:01.221 -03 [16281] LOG:  checkpoint starting: time
+2025-08-05 19:43:02.466 -03 [16281] LOG:  checkpoint complete: wrote 12 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.222 s, sync=0.009 s, total=1.246 s; sync files=5, longest=0.009 s, average=0.002 s; distance=24 kB, estimate=199 kB; lsn=0/12268C80, redo lsn=0/12268C28
+2025-08-05 19:48:01.552 -03 [16281] LOG:  checkpoint starting: time
+2025-08-05 19:48:07.539 -03 [16281] LOG:  checkpoint complete: wrote 60 buffers (0.4%); 0 WAL file(s) added, 0 removed, 0 recycled; write=5.975 s, sync=0.003 s, total=5.988 s; sync files=52, longest=0.002 s, average=0.001 s; distance=241 kB, estimate=241 kB; lsn=0/122A5120, redo lsn=0/122A5090
+2025-08-05 21:28:03.368 -03 [16281] LOG:  checkpoint starting: time
+2025-08-05 21:28:04.294 -03 [16281] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.913 s, sync=0.007 s, total=0.926 s; sync files=7, longest=0.005 s, average=0.001 s; distance=1 kB, estimate=217 kB; lsn=0/122A55A0, redo lsn=0/122A5548
+2025-08-05 23:43:05.711 -03 [16281] LOG:  checkpoint starting: time
+2025-08-05 23:43:06.966 -03 [16281] LOG:  checkpoint complete: wrote 13 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.228 s, sync=0.004 s, total=1.255 s; sync files=11, longest=0.003 s, average=0.001 s; distance=2 kB, estimate=195 kB; lsn=0/122A5DB0, redo lsn=0/122A5D58
+2025-08-05 23:48:06.066 -03 [16281] LOG:  checkpoint starting: time
+2025-08-05 23:48:06.602 -03 [16281] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.512 s, sync=0.006 s, total=0.536 s; sync files=6, longest=0.004 s, average=0.001 s; distance=1 kB, estimate=176 kB; lsn=0/122A6350, redo lsn=0/122A62F8
+2025-08-06 00:03:06.892 -03 [16281] LOG:  checkpoint starting: time
+2025-08-06 00:03:07.761 -03 [16281] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.838 s, sync=0.007 s, total=0.869 s; sync files=7, longest=0.004 s, average=0.001 s; distance=25 kB, estimate=161 kB; lsn=0/122AC9D8, redo lsn=0/122AC980
+2025-08-06 00:16:25.292 -03 [49282] ERROR:  null value in column "user_id" of relation "clothing_items" violates not-null constraint
+2025-08-06 00:16:25.292 -03 [49282] DETAIL:  Failing row contains (3, Remera, G, Negro, 10000, null, f, 2025-08-06 03:16:25.258949, 2025-08-06 03:16:25.258949, null).
+2025-08-06 00:16:25.292 -03 [49282] STATEMENT:  INSERT INTO "clothing_items" ("name", "size", "color", "price", "user_id", "sold", "created_at", "updated_at", "owner_name") VALUES ('Remera', 'G', 'Negro', 10000, NULL, FALSE, '2025-08-06 03:16:25.258949', '2025-08-06 03:16:25.258949', NULL) RETURNING "id" /*action='create',application='Vestiventa',controller='clothing_items'*/
+2025-08-06 00:18:07.069 -03 [16281] LOG:  checkpoint starting: time
+2025-08-06 00:18:07.193 -03 [16281] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.105 s, sync=0.005 s, total=0.125 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=145 kB; lsn=0/122ACBA8, redo lsn=0/122ACB50
+2025-08-06 00:18:36.680 -03 [49282] ERROR:  null value in column "user_id" of relation "clothing_items" violates not-null constraint
+2025-08-06 00:18:36.680 -03 [49282] DETAIL:  Failing row contains (4, Remera, G, Negro, 10000, null, f, 2025-08-06 03:18:36.599468, 2025-08-06 03:18:36.599468, Luis).
+2025-08-06 00:18:36.680 -03 [49282] STATEMENT:  INSERT INTO "clothing_items" ("name", "size", "color", "price", "user_id", "sold", "created_at", "updated_at", "owner_name") VALUES ('Remera', 'G', 'Negro', 10000, NULL, FALSE, '2025-08-06 03:18:36.599468', '2025-08-06 03:18:36.599468', 'Luis') RETURNING "id" /*action='create',application='Vestiventa',controller='clothing_items'*/
+2025-08-06 00:23:07.298 -03 [16281] LOG:  checkpoint starting: time
+2025-08-06 00:23:07.422 -03 [16281] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.104 s, sync=0.009 s, total=0.124 s; sync files=2, longest=0.006 s, average=0.005 s; distance=0 kB, estimate=130 kB; lsn=0/122ACD78, redo lsn=0/122ACD20
+2025-08-06 00:23:33.327 -03 [49282] ERROR:  null value in column "user_id" of relation "clothing_items" violates not-null constraint
+2025-08-06 00:23:33.327 -03 [49282] DETAIL:  Failing row contains (5, Remera, G, Negro, 10000, null, f, 2025-08-06 03:23:33.300994, 2025-08-06 03:23:33.300994, Luis).
+2025-08-06 00:23:33.327 -03 [49282] STATEMENT:  INSERT INTO "clothing_items" ("name", "size", "color", "price", "user_id", "sold", "created_at", "updated_at", "owner_name") VALUES ('Remera', 'G', 'Negro', 10000, NULL, FALSE, '2025-08-06 03:23:33.300994', '2025-08-06 03:23:33.300994', 'Luis') RETURNING "id" /*action='create',application='Vestiventa',controller='clothing_items'*/
+2025-08-06 00:28:07.522 -03 [16281] LOG:  checkpoint starting: time
+2025-08-06 00:28:07.635 -03 [16281] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.003 s, total=0.114 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=117 kB; lsn=0/122ACF48, redo lsn=0/122ACEF0
+2025-08-06 00:33:07.735 -03 [16281] LOG:  checkpoint starting: time
+2025-08-06 00:33:08.963 -03 [16281] LOG:  checkpoint complete: wrote 13 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.219 s, sync=0.003 s, total=1.228 s; sync files=13, longest=0.002 s, average=0.001 s; distance=49 kB, estimate=110 kB; lsn=0/122B9420, redo lsn=0/122B93C8
+2025-08-06 00:43:08.136 -03 [16281] LOG:  checkpoint starting: time
+2025-08-06 00:43:08.256 -03 [16281] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.106 s, sync=0.004 s, total=0.120 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=99 kB; lsn=0/122B96A0, redo lsn=0/122B9648
