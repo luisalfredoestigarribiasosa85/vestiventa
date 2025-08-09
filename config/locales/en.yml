@@ -29,3 +29,20 @@
 
 en:
   hello: "Hello world"
+  sales:
+    delivery_status:
+      pending: "Pending"
+      in_transit: "In Transit"
+      delivered: "Delivered"
+    notices:
+      created: "Sale was successfully created."
+      updated: "Sale was successfully updated."
+      destroyed: "Sale was successfully deleted."
+  activerecord:
+    errors:
+      models:
+        sale:
+          attributes:
+            clothing_item:
+              already_sold: "The selected clothing item has already been sold"
+              not_owner: "You cannot sell an item that doesn't belong to you"

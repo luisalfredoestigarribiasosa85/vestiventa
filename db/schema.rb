@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_06_033014) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_09_182547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,16 +23,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_06_033014) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "owner_name"
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_clothing_items_on_user_id"
   end
 
   create_table "sales", force: :cascade do |t|
     t.bigint "clothing_item_id", null: false
     t.string "buyer_name"
     t.string "address"
-    t.string "delivery_status"
+    t.string "delivery_status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.decimal "price", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["clothing_item_id"], name: "index_sales_on_clothing_item_id"
+    t.index ["user_id"], name: "index_sales_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -48,5 +53,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_06_033014) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "clothing_items", "users"
   add_foreign_key "sales", "clothing_items"
+  add_foreign_key "sales", "users"
 end

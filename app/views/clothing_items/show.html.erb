@@ -1,15 +1,19 @@
 <% content_for :title, "Showing clothing item" %>
 
-<div class="md:w-2/3 w-full">
+<div class="max-w-4xl mx-auto p-10 bg-white rounded-lg shadow-md">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="mb-5 bg-green-50 p-3 rounded-lg">
+      <p class="text-green-500 font-medium" id="notice"><%= notice %></p>
+    </div>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Mostrando Prendas</h1>
+  <h1 class="font-bold text-4xl mb-5">Mostrando Prendas</h1>
 
   <%= render @clothing_item %>
 
-  <%= link_to "Editar esta prenda", edit_clothing_item_path(@clothing_item), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Volver al inventario", clothing_items_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Eliminar esta prenda", @clothing_item, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  <div class="flex justify-between items-center">
+    <%= link_to "Editar esta prenda", edit_clothing_item_path(@clothing_item), class: "rounded-md px-3 py-2 bg-gray-100 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium" %>
+    <%= link_to "Volver al inventario", clothing_items_path, class: "rounded-md px-3 py-2 bg-gray-100 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium" %>
+    <%= button_to "Eliminar esta prenda", @clothing_item, method: :delete, class: "rounded-md px-3 py-2 bg-red-600 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm font-medium text-white", data: { turbo_confirm: "Are you sure?" } %>
+  </div>
 </div>

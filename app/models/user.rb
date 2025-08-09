@@ -4,9 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :clothing_items
+  has_many :clothing_items, dependent: :destroy
+  has_many :sales, through: :clothing_items, dependent: :destroy
 
   def total_earnings
-    clothing_items.where(sold: true).joins(:sale).sum(:price)
+    sales.joins(:clothing_item).sum(:price)
   end
 end

@@ -1,0 +1,60 @@
+es:
+  activerecord:
+    models:
+      sale: "Venta"
+      clothing_item: "Prenda"
+    attributes:
+      sale:
+        buyer_name: "Nombre del comprador"
+        address: "Dirección de entrega"
+        delivery_status: "Estado de entrega"
+        clothing_item_id: "Prenda"
+        price: "Precio"
+      clothing_item:
+        name: "Nombre"
+        size: "Talla"
+        color: "Color"
+        price: "Precio"
+        owner_name: "Dueño"
+        sold: "Vendido"
+    errors:
+      models:
+        sale:
+          attributes:
+            clothing_item:
+              already_sold: "La prenda seleccionada ya ha sido vendida"
+              not_owner: "No puedes vender una prenda que no te pertenece"
+  sales:
+    delivery_status:
+      pending: "Pendiente"
+      in_transit: "En tránsito"
+      delivered: "Entregado"
+    notices:
+      created: "La venta se ha registrado correctamente."
+      updated: "La venta se ha actualizado correctamente."
+      destroyed: "La venta se ha eliminado correctamente."
+    confirmations:
+      destroy: "¿Estás seguro de eliminar esta venta?"
+    sale_not_found: "Venta no encontrada"
+  clothing_items:
+    notices:
+      created: "La prenda se ha creado correctamente."
+      updated: "La prenda se ha actualizado correctamente."
+      destroyed: "La prenda se ha eliminado correctamente."
+    confirmations:
+      destroy: "¿Estás seguro de eliminar esta prenda?"
+    clothing_item_not_found: "Prenda no encontrada"
+  helpers:
+    submit:
+      create: "Crear %{model}"
+      submit: "Guardar %{model}"
+      update: "Actualizar %{model}"
+      confirm: "¿Estás seguro?"
+  views:
+    pagination:
+      first: "« Primero"
+      last: "Último »"
+      previous: "« Anterior"
+      next: "Siguiente »"
+      truncate: "..."
+  unauthorized: "No estás autorizado para realizar esta acción."

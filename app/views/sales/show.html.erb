@@ -1,15 +1,32 @@
-<% content_for :title, "Showing sale" %>
+<% content_for :title, "Detalle de Venta ##{@sale.id}" %>
 
-<div class="md:w-2/3 w-full">
+<div class="w-full">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="mb-6 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200" id="notice">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <%= notice %>
+      </div>
+    </div>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing sale</h1>
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <div>
+      <h1 class="font-bold text-2xl sm:text-3xl">Venta #<%= @sale.id %></h1>
+      <p class="text-sm text-gray-500 mt-1">Detalles completos de la venta</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+      <%= link_to "Editar venta", edit_sale_path(@sale), class: "w-full sm:w-auto text-center rounded-md px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium" %>
+      <%= link_to "Volver a ventas", sales_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 rounded-md px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium" %>
+      <%= button_to "Eliminar venta", @sale, 
+          method: :delete, 
+          form: { class: "w-full sm:w-auto mt-2 sm:mt-0" },
+          class: "w-full text-center rounded-md px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium cursor-pointer", 
+          data: { turbo_confirm: "¿Estás seguro de eliminar esta venta? Esta acción no se puede deshacer." } %>
+    </div>
+  </div>
 
   <%= render @sale %>
-
-  <%= link_to "Edit this sale", edit_sale_path(@sale), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to sales", sales_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this sale", @sale, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
 </div>

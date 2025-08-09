@@ -1,4 +1,4 @@
-<%= form_with(model: sale, class: "max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md space-y-6") do |form| %>
+<%= form_with(model: sale, class: "max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md space-y-6", data: { controller: "sale-form" }) do |form| %>
   <% if sale.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-700 px-4 py-3 font-semibold rounded-lg mb-6 border border-red-200">
       <h2 class="mb-2"><%= pluralize(sale.errors.count, "error") %> no permitieron guardar esta venta:</h2>
@@ -11,38 +11,124 @@
   <% end %>
 
   <div>
-    <%= form.label :clothing_item_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
-    <%= form.text_field :clothing_item_id, class: [
-      "block shadow-sm rounded-md border px-3 py-2 w-full transition focus:ring-2",
-      sale.errors[:clothing_item_id].any? ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"
-    ] %>
+    <%= form.label :clothing_item_id, "Prenda a vender", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <% if @available_items.any? %>
+      <%= form.collection_select :clothing_item_id, 
+          @available_items, 
+          :id, 
+          lambda { |item| "#{item.name} - Talle: #{item.size} - Color: #{item.color} - $#{item.price}" },
+          { prompt: "Selecciona una prenda" },
+          class: [
+            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:max-w-xs sm:text-sm sm:leading-6",
+            sale.errors[:clothing_item_id].any? ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"
+          ],
+          data: { 
+            action: "change->sale-form#updatePrice",
+            sale_form_target: "clothingItemSelect"
+          }
+      %>
+      
+      <div class="mt-4">
+        <%= form.label :price, "Precio de venta", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span class="text-gray-500 sm:text-sm">$</span>
+          </div>
+          <%= form.number_field :price, 
+              step: "0.01", 
+              min: "0",
+              class: [
+                "block w-full pl-7 pr-12 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
+                sale.errors[:price].any? ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"
+              ],
+              data: { sale_form_target: "priceInput" }
+          %>
+        </div>
+        <p class="mt-1 text-xs text-gray-500">Precio original: <span data-sale-form-target="originalPrice">-</span></p>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-500">No tienes prendas disponibles para vender.</p>
+      <%= link_to "Agregar nueva prenda", new_clothing_item_path, class: "mt-2 text-sm font-medium text-blue-600 hover:text-blue-500" %>
+    <% end %>
   </div>
 
   <div>
-    <%= form.label :buyer_name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.label :buyer_name, "Nombre del comprador", class: "block text-sm font-medium text-gray-700 mb-1" %>
     <%= form.text_field :buyer_name, class: [
-      "block shadow-sm rounded-md border px-3 py-2 w-full transition focus:ring-2",
+      "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
       sale.errors[:buyer_name].any? ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"
     ] %>
   </div>
 
   <div>
-    <%= form.label :address, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.label :address, "Dirección de entrega", class: "block text-sm font-medium text-gray-700 mb-1" %>
     <%= form.text_field :address, class: [
-      "block shadow-sm rounded-md border px-3 py-2 w-full transition focus:ring-2",
+      "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
       sale.errors[:address].any? ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"
     ] %>
   </div>
 
   <div>
-    <%= form.label :delivery_status, class: "block text-sm font-medium text-gray-700 mb-1" %>
-    <%= form.text_field :delivery_status, class: [
-      "block shadow-sm rounded-md border px-3 py-2 w-full transition focus:ring-2",
-      sale.errors[:delivery_status].any? ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"
-    ] %>
+    <%= form.label :delivery_status, "Estado de entrega", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.select :delivery_status, 
+        options_for_select(
+          [
+            ['Pendiente', 'pending'],
+            ['En tránsito', 'in_transit'],
+            ['Entregado', 'delivered']
+          ],
+          sale.delivery_status || 'pending'
+        ),
+        {},
+        class: [
+          "block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:max-w-xs sm:text-sm sm:leading-6",
+          sale.errors[:delivery_status].any? ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"
+        ]
+    %>
   </div>
 
-  <div>
-    <%= form.submit class: "w-full rounded-md px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition" %>
+  <div class="pt-4">
+    <%= form.submit class: "flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer" %>
   </div>
+<% end %>
+
+<% content_for :javascript do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const saleForm = document.querySelector('[data-controller="sale-form"]');
+      
+      if (saleForm) {
+        // Obtener los precios de las prendas disponibles
+        const clothingItems = {
+          <% @available_items.each do |item| %>
+            <%= item.id %>: { price: <%= item.price.to_f %> },
+          <% end %>
+        };
+        
+        // Actualizar el precio cuando se selecciona una prenda
+        const clothingItemSelect = saleForm.querySelector('[data-sale-form-target="clothingItemSelect"]');
+        const priceInput = saleForm.querySelector('[data-sale-form-target="priceInput"]');
+        const originalPriceDisplay = saleForm.querySelector('[data-sale-form-target="originalPrice"]');
+        
+        if (clothingItemSelect && priceInput && originalPriceDisplay) {
+          clothingItemSelect.addEventListener('change', function() {
+            const selectedItemId = this.value;
+            if (selectedItemId && clothingItems[selectedItemId]) {
+              const price = clothingItems[selectedItemId].price;
+              priceInput.value = price.toFixed(2);
+              originalPriceDisplay.textContent = `$${price.toFixed(2)}`;
+            } else {
+              priceInput.value = '';
+              originalPriceDisplay.textContent = '-';
+            }
+          });
+          
+          // Disparar el evento change si ya hay un valor seleccionado
+          if (clothingItemSelect.value) {
+            clothingItemSelect.dispatchEvent(new Event('change'));
+          }
+        }
+      }
+    });
+  </script>
 <% end %>
