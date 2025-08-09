@@ -5,15 +5,18 @@ Rails.application.configure do
 
   # config/environments/production.rb
 
+  # --- SECRET KEY BASE robusto para Railway ---
   # 1) En runtime: usa SECRET_KEY_BASE si existe
-  # 2) En build (assets:precompile en Railway): acepta SECRET_KEY_BASE_DUMMY
-  # 3) Si no hay ninguna de las dos, intenta credenciales de producción
+  # 2) En build: acepta SECRET_KEY_BASE_DUMMY (lo inyecta Nixpacks)
+  # 3) Si no hay ENV, usa credentials de producción
   config.secret_key_base =
     ENV["SECRET_KEY_BASE"] ||
     ENV["SECRET_KEY_BASE_DUMMY"] ||
-    Rails.application.credentials.secret_key_base
+    (Rails.application.credentials.secret_key_base rescue nil)
 
-
+  # No obligues master key si ya vas por ENV:
+  # (Podés dejarla en true si usás credentials; con la línea de arriba no hace falta)
+  # config.require_master_key = false
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
