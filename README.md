@@ -1,24 +1,36 @@
-# README
+# Vestiventa
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Vestiventa es una aplicacíon web que ayuda a controlar y gestionar las ventas y compras de una tienda de ropa.
 
-Things you may want to cover:
+## Características
 
-* Ruby version
+* Autenticación de usuarios con Devise
+* Control de ventas y compras
+* Gestiones de productos y categorías
+* Generación de informes de ventas y compras
 
-* System dependencies
+## Instalación
 
-* Configuration
+1. Clona el repositorio: `git clone https://github.com/your-username/vestiventa.git`
+2. Instala las dependencias: `bundle install`
+3. Configura la base de datos: `rails db:create db:migrate`
+4. Inicia el servidor: `rails server`
 
-* Database creation
+## Uso
 
-* Database initialization
+* Inicia sesión con un usuario y contraseña
+* Agrega productos y categorías
+* Registra ventas y compras
+* Consulta informes de ventas y compras
 
-* How to run the test suite
+## Contribuciones
 
-* Services (job queues, cache servers, search engines, etc.)
+Este proyecto está bajo una licencia de software libre. Puedes contribuir de varias maneras:
 
-* Deployment instructions
+* Reportando errores
+* Creando pull requests con mejoras o correcciones
+* Proporcionando feedback
 
-* ...
+## Licencia
+
+Este proyecto está bajo la licencia MIT. Ver [LICENSE.txt](LICENSE.txt) para obtener más informacíon.
