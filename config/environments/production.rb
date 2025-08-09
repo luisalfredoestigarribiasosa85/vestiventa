@@ -3,8 +3,16 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
-  config.require_master_key = false
+  # config/environments/production.rb
+
+  # 1) En runtime: usa SECRET_KEY_BASE si existe
+  # 2) En build (assets:precompile en Railway): acepta SECRET_KEY_BASE_DUMMY
+  # 3) Si no hay ninguna de las dos, intenta credenciales de producción
+  config.secret_key_base =
+    ENV["SECRET_KEY_BASE"] ||
+    ENV["SECRET_KEY_BASE_DUMMY"] ||
+    Rails.application.credentials.secret_key_base
+
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
