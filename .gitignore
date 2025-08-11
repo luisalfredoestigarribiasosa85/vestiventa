@@ -15,10 +15,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-
-# Ignore logfile
 logfile
-
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/

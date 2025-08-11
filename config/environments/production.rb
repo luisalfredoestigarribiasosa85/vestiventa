@@ -6,6 +6,9 @@ Rails.application.configure do
   # config/environments/production.rb
 
   config.require_master_key = true
+
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV["RENDER"].present?
+
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
