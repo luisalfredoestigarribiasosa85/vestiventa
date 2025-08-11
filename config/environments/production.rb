@@ -5,7 +5,19 @@ Rails.application.configure do
 
   # config/environments/production.rb
 
-  config.require_master_key = true
+  # Configuración para manejar la precompilación de assets
+  config.assets.compile = false
+  config.assets.unknown_asset_fallback = false
+
+  # Configuración de secret key base
+  config.require_master_key = ENV["RAILS_MASTER_KEY"].present?
+
+  # Solo intenta cargar las credenciales si la clave maestra está disponible
+  if config.require_master_key
+    config.secret_key_base = Rails.application.credentials.secret_key_base
+  else
+    config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_key_for_precompile_phase"
+  end
 
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV["RENDER"].present?
 

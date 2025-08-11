@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+echo "=== Iniciando precompilación de assets ==="
+
+# Configurar una clave secreta temporal si no existe
+if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then
+  echo "ADVERTENCIA: No se encontró SECRET_KEY_BASE ni RAILS_MASTER_KEY"
+  echo "Usando clave temporal para la precompilación..."
+  export SECRET_KEY_BASE=dummy_key_for_precompile_phase
+fi
+
+# Ejecutar la precompilación
+echo "Ejecutando precompilación de assets..."
+bundle exec rails assets:precompile
+
+echo "=== Precompilación completada ==="

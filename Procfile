@@ -1,2 +1,2 @@
 web: bundle exec puma -C config/puma.rb
-release: rails db:migrate
+release: chmod +x bin/precompile && bin/precompile && rails db:migrate
