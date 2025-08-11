@@ -2,16 +2,18 @@
 set -e
 echo "=== Iniciando migraciones de base de datos ==="
 
-# Esperar a que la base de datos esté lista
-echo "Esperando a que la base de datos esté lista..."
-until PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c '\q' 2>/dev/null; do
-  echo "Base de datos no disponible, esperando..."
+# Esperar a que la base de datos esté lista (máximo 30 segundos)
+for i in {1..15}; do
+  if PGPASSWORD=${DATABASE_URL##*:} psql -h "${DATABASE_URL##*@}" -U "${DATABASE_URL##*//}" -d "${DATABASE_URL##*/}" -c '\q' 2>/dev/null; then
+    break
+  fi
+  echo "Esperando a que la base de datos esté lista... (intento $i/15)"
   sleep 2
 done
 
 # Ejecutar migraciones
 echo "Ejecutando migraciones..."
-bundle exec rails db:prepare
+DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:prepare
 
 echo "=== Migraciones completadas ==="
 exit 0

@@ -6,20 +6,27 @@ Rails.application.configure do
   # config/environments/production.rb
 
   # Configuración para manejar la precompilación de assets
-  config.assets.compile = false
-  config.assets.unknown_asset_fallback = false
+  # config.assets.compile = false
+  # config.assets.unknown_asset_fallback = false
 
   # Configuración de secret key base
-  config.require_master_key = ENV["RAILS_MASTER_KEY"].present?
-
-  # Solo intenta cargar las credenciales si la clave maestra está disponible
-  if config.require_master_key
+  if ENV["RAILS_MASTER_KEY"].present?
+    config.require_master_key = true
     config.secret_key_base = Rails.application.credentials.secret_key_base
   else
+    config.require_master_key = false
     config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_key_for_precompile_phase"
   end
 
+  # Configuración de base de datos
+  config.active_record.database_selector = { delay: 2.seconds }
+  config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
+  config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+  # Configuración de assets
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV["RENDER"].present?
+  config.assets.compile = false
+  config.assets.unknown_asset_fallback = false
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
