@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
-
 echo "=== Iniciando precompilación de assets ==="
+
+# Configuración temporal para evitar conexión a la base de datos
+export RAILS_ENV=production
+export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+unset DATABASE_URL
 
 # Configurar una clave secreta temporal si no existe
 if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then
@@ -10,16 +14,32 @@ if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then
   export SECRET_KEY_BASE=dummy_key_for_precompile_phase
 fi
 
-# Forzar modo de assets sin base de datos
-export RAILS_ENV=assets
-export DATABASE_URL=postgresql://user:pass@localhost/nonexistent_db
+# Crear un archivo temporal de configuración de base de datos
+cat > config/database.temp.yml << 'EOL'
+default: &default
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
+  database: db/precompile.sqlite3
+
+production:
+  <<: *default
+EOL
+
+# Usar la configuración temporal
+export DATABASE_URL="sqlite3:db/precompile.sqlite3"
 
 # Ejecutar la precompilación
 echo "Ejecutando precompilación de assets..."
 
-# Desactivar temporalmente la verificación de la base de datos
-DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
+# Forzar la precompilación sin verificar la base de datos
 bundle exec rake assets:precompile || \
   echo "ADVERTENCIA: Falló la precompilación, continuando sin ella"
 
+# Limpiar
+rm -f config/database.temp.yml
+rm -f db/precompile.sqlite3
+
 echo "=== Precompilación completada ==="
+
+exit 0

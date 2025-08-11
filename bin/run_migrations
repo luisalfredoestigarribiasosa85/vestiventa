@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+echo "=== Iniciando migraciones de base de datos ==="
+
+# Esperar a que la base de datos esté lista
+echo "Esperando a que la base de datos esté lista..."
+until PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c '\q' 2>/dev/null; do
+  echo "Base de datos no disponible, esperando..."
+  sleep 2
+done
+
+# Ejecutar migraciones
+echo "Ejecutando migraciones..."
+bundle exec rails db:prepare
+
+echo "=== Migraciones completadas ==="
+exit 0
