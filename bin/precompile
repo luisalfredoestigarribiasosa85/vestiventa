@@ -2,12 +2,11 @@
 set -e
 echo "=== Iniciando precompilación de assets ==="
 
-# Configuración temporal para evitar conexión a la base de datos
+# Usar entorno de producción
 export RAILS_ENV=production
-export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
 
-# Usar una base de datos SQLite temporal
-export DATABASE_URL="sqlite3:db/precompile.sqlite3"
+# Deshabilitar verificación de base de datos
+export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
 
 # Configurar una clave secreta temporal si no existe
 if [ -z "$SECRET_KEY_BASE" ] && [ -z "$RAILS_MASTER_KEY" ]; then
@@ -21,8 +20,6 @@ mkdir -p tmp/cache
 
 # Ejecutar la precompilación
 echo "Ejecutando precompilación de assets..."
-
-# Forzar la precompilación sin verificar la base de datos
 bundle exec rake assets:precompile || \
   echo "ADVERTENCIA: Falló la precompilación, continuando sin ella"
 

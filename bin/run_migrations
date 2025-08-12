@@ -2,18 +2,19 @@
 set -e
 echo "=== Iniciando migraciones de base de datos ==="
 
-# Esperar a que la base de datos esté lista (máximo 30 segundos)
+# Esperar a que la base de datos esté lista
+echo "Esperando a que la base de datos esté lista..."
 for i in {1..15}; do
-  if PGPASSWORD=${DATABASE_URL##*:} psql -h "${DATABASE_URL##*@}" -U "${DATABASE_URL##*//}" -d "${DATABASE_URL##*/}" -c '\q' 2>/dev/null; then
+  if bundle exec rails runner "ActiveRecord::Base.connection_pool.with_connection { |con| con.active? }" >/dev/null 2>&1; then
     break
   fi
-  echo "Esperando a que la base de datos esté lista... (intento $i/15)"
+  echo "Intento $i/15 - Base de datos no disponible, esperando..."
   sleep 2
 done
 
 # Ejecutar migraciones
 echo "Ejecutando migraciones..."
-DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:prepare
+bundle exec rails db:prepare
 
 echo "=== Migraciones completadas ==="
 exit 0

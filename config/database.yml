@@ -81,3 +81,4 @@ test:
 production:
   <<: *default
   # La conexión se manejará completamente a través de DATABASE_URL
+  url: <%= ENV['DATABASE_URL'] %>
