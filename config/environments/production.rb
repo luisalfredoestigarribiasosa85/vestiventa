@@ -9,15 +9,9 @@ Rails.application.configure do
   config.assets.compile = true
   config.assets.unknown_asset_fallback = true
 
-  # Configuración de secret key base
-  config.require_master_key = ENV["RAILS_MASTER_KEY"].present?
-
-  # Usar la clave secreta de las credenciales o una clave de respaldo
-  if ENV["RAILS_MASTER_KEY"].present? && Rails.application.credentials.secret_key_base.present?
-    config.secret_key_base = Rails.application.credentials.secret_key_base
-  else
-    config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
-  end
+  # Configuración de secret key base - Versión simplificada
+  config.require_master_key = false
+  config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
 
   # Configuración de base de datos
   config.active_record.database_selector = { delay: 2.seconds }

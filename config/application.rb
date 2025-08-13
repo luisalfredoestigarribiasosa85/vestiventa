@@ -23,5 +23,12 @@ module Vestiventa
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Solo cargar credenciales si el archivo existe y tenemos la llave maestra
+    if File.exist?(Rails.root.join("config/credentials.yml.enc")) && ENV["RAILS_MASTER_KEY"].present?
+      config.require_master_key = true
+    else
+      config.require_master_key = false
+    end
   end
 end
