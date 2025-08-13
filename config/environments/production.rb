@@ -6,16 +6,17 @@ Rails.application.configure do
   # config/environments/production.rb
 
   # Configuración para manejar la precompilación de assets
-  # config.assets.compile = false
-  # config.assets.unknown_asset_fallback = false
+  config.assets.compile = true
+  config.assets.unknown_asset_fallback = true
 
   # Configuración de secret key base
-  if ENV["RAILS_MASTER_KEY"].present?
-    config.require_master_key = true
+  config.require_master_key = ENV["RAILS_MASTER_KEY"].present?
+
+  # Usar la clave secreta de las credenciales o una clave de respaldo
+  if ENV["RAILS_MASTER_KEY"].present? && Rails.application.credentials.secret_key_base.present?
     config.secret_key_base = Rails.application.credentials.secret_key_base
   else
-    config.require_master_key = false
-    config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_key_for_precompile_phase"
+    config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
   end
 
   # Configuración de base de datos
@@ -27,6 +28,18 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV["RENDER"].present?
   config.assets.compile = false
   config.assets.unknown_asset_fallback = false
+
+  # Configuración de caché
+  config.cache_store = :redis_cache_store, {
+    url: ENV["REDIS_URL"] || "redis://localhost:6379/1",
+    connect_timeout: 30,
+    read_timeout: 0.3,
+    write_timeout: 0.5,
+    reconnect_attempts: 1,
+    error_handler: ->(method:, returning:, exception:) {
+      Rails.logger.error("Redis command failed: #{method} - #{exception.class}: #{exception.message}")
+    }
+  }
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
@@ -72,7 +85,7 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store
+  # config.cache_store = :solid_cache_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
