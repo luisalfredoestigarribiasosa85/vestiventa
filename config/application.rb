@@ -19,20 +19,19 @@ module Vestiventa
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # Desactivar temporalmente la verificación de credenciales
+    # Configuración de credenciales simplificada
     config.require_master_key = false
     config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
 
-    # Solo intentar cargar credenciales si el archivo existe y tenemos la llave maestra
-    if File.exist?(Rails.root.join("config/credentials.yml.enc"))
-      if ENV["RAILS_MASTER_KEY"].present?
-        begin
-          config.require_master_key = true
-          config.secret_key_base = Rails.application.credentials.secret_key_base
-        rescue ActiveSupport::MessageEncryptor::InvalidMessage => e
-          Rails.logger.error("Error al cargar credenciales: #{e.message}")
-          config.require_master_key = false
-        end
+    # Intentar cargar credenciales solo si la clave maestra está presente
+    if ENV["RAILS_MASTER_KEY"].present? && File.exist?(Rails.root.join("config/credentials.yml.enc"))
+      begin
+        config.require_master_key = true
+        # Solo intentar acceder a las credenciales si realmente las necesitamos
+        config.secret_key_base = Rails.application.credentials.secret_key_base if Rails.application.credentials.secret_key_base.present?
+      rescue ActiveSupport::MessageEncryptor::InvalidMessage
+        # Si hay un error con las credenciales, continuar sin ellas
+        config.require_master_key = false
       end
     end
   end

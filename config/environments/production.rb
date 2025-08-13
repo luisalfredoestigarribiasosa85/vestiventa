@@ -7,9 +7,8 @@ Rails.application.configure do
   config.assets.compile = true
   config.assets.unknown_asset_fallback = true
 
-  # Configuración de secret key base - Versión simplificada
-  config.require_master_key = false
-  config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
+  # No sobrescribir la configuración de secret_key_base aquí
+  # Se maneja en application.rb
 
   # Configuración de base de datos
   config.active_record.database_selector = { delay: 2.seconds }
