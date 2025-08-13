@@ -3,8 +3,6 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # config/environments/production.rb
-
   # Configuración para manejar la precompilación de assets
   config.assets.compile = true
   config.assets.unknown_asset_fallback = true
@@ -23,17 +21,8 @@ Rails.application.configure do
   config.assets.compile = false
   config.assets.unknown_asset_fallback = false
 
-  # Configuración de caché
-  config.cache_store = :redis_cache_store, {
-    url: ENV["REDIS_URL"] || "redis://localhost:6379/1",
-    connect_timeout: 30,
-    read_timeout: 0.3,
-    write_timeout: 0.5,
-    reconnect_attempts: 1,
-    error_handler: ->(method:, returning:, exception:) {
-      Rails.logger.error("Redis command failed: #{method} - #{exception.class}: #{exception.message}")
-    }
-  }
+  # Configuración de caché con solid_cache
+  config.cache_store = :solid_cache_store
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
