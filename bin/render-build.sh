@@ -2,42 +2,45 @@
 # exit on error
 set -o errexit
 
-# Enable detailed logging
+# Habilitar modo de depuración
 set -x
 
-echo "=== Starting build process ==="
+echo "=== Iniciando proceso de construcción ==="
 
-# Configure bundler to skip development and test gems
-echo "=== Configuring bundler ==="
-bundle config set without 'development test' || echo "Warning: Could not set bundler config"
+# Configurar bundler para omitir gems de desarrollo y prueba
+echo "=== Configurando bundler ==="
+bundle config set without 'development test' || echo "Advertencia: No se pudo configurar bundler"
 
-# Install dependencies
-echo "=== Installing dependencies ==="
-bundle install || { echo "Failed to install dependencies"; exit 1; }
+# Instalar dependencias
+echo "=== Instalando dependencias ==="
+bundle install || { echo "Error al instalar dependencias"; exit 1; }
 
-# Check if database is accessible
-echo "=== Checking database connection ==="
-if ! bundle exec rails runner 'ActiveRecord::Base.connection' 2>/dev/null; then
-  echo "=== Database doesn't exist or is not accessible, running setup ==="
-  bundle exec rails db:prepare || { echo "Failed to prepare database"; exit 1; }
-else
-  echo "=== Running migrations ==="
-  bundle exec rails db:migrate || { echo "Failed to run migrations"; exit 1; }
-fi
+# Configurar base de datos
+echo "=== Configurando base de datos ==="
 
-# Precompile assets
-echo "=== Precompiling assets ==="
-bundle exec rails assets:precompile || { echo "Failed to precompile assets"; exit 1; }
-bundle exec rails assets:clean || echo "Warning: Could not clean assets"
+# Crear la base de datos si no existe
+bundle exec rails db:create 2>/dev/null || echo "La base de datos ya existe o no se pudo crear"
 
-# Clear tmp
-echo "=== Cleaning temporary files ==="
-bundle exec rails tmp:cache:clear || echo "Warning: Could not clear cache"
-bundle exec rails tmp:sockets:clear || echo "Warning: Could not clear sockets"
-bundle exec rails tmp:pids:clear || echo "Warning: Could not clear pids"
+# Ejecutar migraciones
+echo "=== Ejecutando migraciones ==="
+bundle exec rails db:migrate || { echo "Error al ejecutar migraciones"; exit 1; }
 
-# Ensure the server.pid is removed if it exists
-echo "=== Cleaning up server.pid ==="
+# Precargar datos de semilla si es necesario
+# bundle exec rails db:seed || echo "Advertencia: No se pudieron cargar los datos de semilla"
+
+# Precompilar assets
+echo "=== Precompilando assets ==="
+bundle exec rails assets:precompile || { echo "Error al precompilar assets"; exit 1; }
+bundle exec rails assets:clean || echo "Advertencia: No se pudieron limpiar los assets"
+
+# Limpiar archivos temporales
+echo "=== Limpiando archivos temporales ==="
+bundle exec rails tmp:cache:clear || echo "Advertencia: No se pudo limpiar la caché"
+bundle exec rails tmp:sockets:clear || echo "Advertencia: No se pudieron limpiar los sockets"
+bundle exec rails tmp:pids:clear || echo "Advertencia: No se pudieron limpiar los PIDs"
+
+# Asegurarse de que no exista server.pid
+echo "=== Limpiando server.pid ==="
 rm -f tmp/pids/server.pid
 
-echo "=== Build completed successfully ==="
+echo "=== Construcción completada exitosamente ==="

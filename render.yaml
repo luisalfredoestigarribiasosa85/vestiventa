@@ -7,6 +7,8 @@ services:
     envVars:
       - key: RAILS_ENV
         value: production
+      - key: RACK_ENV
+        value: production
       - key: RAILS_SERVE_STATIC_FILES
         value: "true"
       - key: RAILS_LOG_TO_STDOUT
@@ -17,6 +19,8 @@ services:
         fromDatabase:
           name: vestiventa-db
           property: connectionString
+      - key: DISABLE_DATABASE_ENVIRONMENT_CHECK
+        value: "1"
     plan: free
     numInstances: 1
     regions:
@@ -30,3 +34,11 @@ services:
     user: vestiventa
     ipAllowList:
       - 0.0.0.0/0
+    # Añadimos variables de entorno para la base de datos
+    envVars:
+      - key: POSTGRES_DB
+        value: vestiventa_production
+      - key: POSTGRES_USER
+        value: vestiventa
+      - key: POSTGRES_PASSWORD
+        generateValue: true
