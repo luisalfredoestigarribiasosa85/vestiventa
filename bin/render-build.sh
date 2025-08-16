@@ -15,18 +15,40 @@ bundle config set without 'development test' || echo "Advertencia: No se pudo co
 echo "=== Instalando dependencias ==="
 bundle install || { echo "Error al instalar dependencias"; exit 1; }
 
-# Configurar base de datos
-echo "=== Configurando base de datos ==="
+# Mostrar información de la base de datos para depuración
+echo "=== Información de la base de datos ==="
+echo "DATABASE_URL: ${DATABASE_URL}"
 
-# Crear la base de datos si no existe
+# Verificar conexión a la base de datos
+echo "=== Verificando conexión a la base de datos ==="
+if ! bundle exec rails runner 'puts "Conexión exitosa: #{ActiveRecord::Base.connection.active?}"'; then
+    echo "ERROR: No se pudo conectar a la base de datos"
+    echo "Verificando configuración..."
+    bundle exec rails runner 'puts "Configuración de base de datos: #{ActiveRecord::Base.connection_config}"'
+    exit 1
+fi
+
+# Intentar crear la base de datos si no existe
+echo "=== Intentando crear la base de datos ==="
 bundle exec rails db:create 2>/dev/null || echo "La base de datos ya existe o no se pudo crear"
 
-# Ejecutar migraciones
-echo "=== Ejecutando migraciones ==="
-bundle exec rails db:migrate || { echo "Error al ejecutar migraciones"; exit 1; }
+# Verificar el estado de las migraciones
+echo "=== Verificando estado de migraciones ==="
+bundle exec rails db:migrate:status || { 
+    echo "Error al verificar el estado de migraciones";
+    echo "Intentando corregir el esquema...";
+    bundle exec rails db:schema:load || echo "No se pudo cargar el esquema";
+}
 
-# Precargar datos de semilla si es necesario
-# bundle exec rails db:seed || echo "Advertencia: No se pudieron cargar los datos de semilla"
+# Ejecutar migraciones con más información de depuración
+echo "=== Ejecutando migraciones ==="
+bundle exec rails db:migrate VERSION=0 2>&1 || echo "No se pudieron revertir todas las migraciones"
+bundle exec rails db:migrate 2>&1 || {
+    echo "=== ERROR DETALLADO EN MIGRACIONES ==="
+    echo "No se pudieron ejecutar las migraciones. Últimos errores:"
+    bundle exec rails runner 'puts ActiveRecord::Base.connection.migration_context.migrations_status' 2>&1
+    exit 1
+}
 
 # Precompilar assets
 echo "=== Precompilando assets ==="
