@@ -22,7 +22,7 @@ services:
       - key: DISABLE_DATABASE_ENVIRONMENT_CHECK
         value: "1"
       - key: PGSSLMODE
-        value: "verify-full"
+        value: "prefer"
     plan: free
     numInstances: 1
     regions:

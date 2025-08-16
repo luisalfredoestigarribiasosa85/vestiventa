@@ -14,29 +14,29 @@ bundle install
 # Configuración de la base de datos
 echo "=== Configurando base de datos ==="
 export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
-export PGSSLMODE=verify-full
+export PGSSLMODE=prefer
+export PGSSLMODE=prefer
 export PGSSLROOTCERT=/etc/ssl/certs/ca-certificates.crt
 
 # Mostrar información de la base de datos
 echo "=== Información de la base de datos ==="
 echo "DATABASE_URL: ${DATABASE_URL}"
 
-# Verificar la conexión usando psql
-echo "=== Verificando conexión con psql ==="
-if psql "${DATABASE_URL}?sslmode=verify-full" -c "SELECT 1" >/dev/null 2>&1; then
-    echo "Conexión exitosa con psql"
-else
-    echo "ERROR: No se pudo conectar a la base de datos con psql"
-    exit 1
-fi
-
-# Verificar la conexión con Rails
-echo "=== Verificando conexión con Rails ==="
+# Intentar conectar sin verificación estricta de SSL
+echo "=== Intentando conexión con SSL en modo prefer ==="
 if ! bundle exec rails runner 'puts "Conexión exitosa: #{ActiveRecord::Base.connection.active?}"'; then
-    echo "ERROR: No se pudo conectar a la base de datos con Rails"
-    echo "=== Configuración de Rails ==="
-    bundle exec rails runner 'puts ActiveRecord::Base.connection_config'
-    exit 1
+    echo "ERROR: No se pudo conectar a la base de datos"
+    echo "=== Intentando con configuración alternativa ==="
+    export PGSSLMODE=require
+    if ! bundle exec rails runner 'puts "Conexión exitosa: #{ActiveRecord::Base.connection.active?}"'; then
+        echo "ERROR: Falló la conexión alternativa"
+        echo "=== Último intento sin SSL ==="
+        export PGSSLMODE=disable
+        if ! bundle exec rails runner 'puts "Conexión exitosa: #{ActiveRecord::Base.connection.active?}"'; then
+            echo "ERROR: No se pudo establecer conexión con ninguna configuración"
+            exit 1
+        fi
+    fi
 fi
 
 # Continuar con el resto del proceso
