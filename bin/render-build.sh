@@ -19,37 +19,14 @@ echo "DATABASE_URL: ${DATABASE_URL}"
 
 # Verificar si la base de datos está accesible
 echo "=== Verificando conexión a la base de datos ==="
+
+# Forzar el uso de SSL para la conexión
+export PGSSLMODE=require
+
 if ! bundle exec rails runner 'puts "Conexión exitosa: #{ActiveRecord::Base.connection.active?}"' 2>/dev/null; then
-    echo "ERROR: No se pudo conectar a la base de datos"
-    echo "=== Intentando conectar manualmente ==="
-    
-    # Extraer parámetros de conexión de DATABASE_URL
-    DB_URL=${DATABASE_URL#*//}  # Elimina 'postgresql://'
-    DB_USER_PASS=${DB_URL%@*}   # Obtiene 'usuario:contraseña'
-    DB_HOST_PATH=${DB_URL#*@}   # Obtiene 'host:puerto/base_de_datos'
-    
-    DB_USER=${DB_USER_PASS%:*}  # Extrae usuario
-    DB_PASS=${DB_USER_PASS#*:}  # Extrae contraseña
-    DB_HOST=${DB_HOST_PATH%/*}  # Extrae host:puerto
-    DB_NAME=${DB_HOST_PATH#*/}  # Extrae nombre de la base de datos
-    
-    echo "Intentando conectar con:"
-    echo "Usuario: $DB_USER"
-    echo "Host: $DB_HOST"
-    echo "Base de datos: $DB_NAME"
-    
-    # Intentar conectar manualmente
-    if PGPASSWORD=$DB_PASS psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "SELECT 1" >/dev/null 2>&1; then
-        echo "¡Conexión exitosa usando psql!"
-        echo "El problema puede estar en la configuración de Rails"
-    else
-        echo "No se pudo conectar ni siquiera con psql"
-        echo "Por favor verifica:"
-        echo "1. Que la base de datos existe"
-        echo "2. Que el usuario tiene permisos"
-        echo "3. Que el host sea accesible desde Render"
-        echo "4. Que el puerto esté abierto (5432 por defecto)"
-    fi
+    echo "ERROR: No se pudo conectar a la base de datos a través de Rails"
+    echo "=== Verificando configuración de Rails ==="
+    bundle exec rails runner 'puts "Configuración de base de datos: #{ActiveRecord::Base.connection_config}"'
     exit 1
 fi
 

@@ -1,22 +1,10 @@
-# PostgreSQL. Versions 9.3 and up are supported.
-#
-# Install the pg driver:
-#   gem install pg
-# On macOS with Homebrew:
-#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
-# On Windows:
-#   gem install pg
-#       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
-#
-# Configure Using Gemfile
-# gem "pg"
-#
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
+  connect_timeout: 5
+  variables:
+    statement_timeout: 5000
 
 development:
   <<: *default
@@ -32,8 +20,17 @@ test:
   password: postgres
   host: localhost
 
+# Configuración para producción en Render
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
   sslmode: require
-  sslrootcert: config/production.pem  # Solo necesario si usas SSL con Render
+  sslrootcert: <%= ENV['RENDER'] ? '/etc/ssl/certs/ca-certificates.crt' : './config/production.pem' %>
+  # Configuración adicional para manejar la URL de conexión
+  host: <%= ENV['DB_HOST'] %>
+  database: <%= ENV['DB_NAME'] %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASS'] %>
+  port: 5432
+  # Timeout más largo para entornos de producción
+  connect_timeout: 10

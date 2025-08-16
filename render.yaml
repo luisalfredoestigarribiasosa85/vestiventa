@@ -21,6 +21,22 @@ services:
           property: connectionString
       - key: DISABLE_DATABASE_ENVIRONMENT_CHECK
         value: "1"
+      - key: DB_HOST
+        fromDatabase:
+          name: vestiventa-db
+          property: hostname
+      - key: DB_NAME
+        fromDatabase:
+          name: vestiventa-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: vestiventa-db
+          property: user
+      - key: DB_PASS
+        fromDatabase:
+          name: vestiventa-db
+          property: password
     plan: free
     numInstances: 1
     regions:
@@ -34,11 +50,3 @@ services:
     user: vestiventa
     ipAllowList:
       - 0.0.0.0/0
-    # Añadimos variables de entorno para la base de datos
-    envVars:
-      - key: POSTGRES_DB
-        value: vestiventa_production
-      - key: POSTGRES_USER
-        value: vestiventa
-      - key: POSTGRES_PASSWORD
-        generateValue: true
