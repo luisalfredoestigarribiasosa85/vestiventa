@@ -2,17 +2,14 @@
 # exit on error
 set -o errexit
 
+# Configure bundler to skip development and test gems
+bundle config set without 'development test'
+
 # Install dependencies
-bundle install --without development test
+bundle install
 
-# Check if database exists and is accessible
-if ! bundle exec rails db:version &> /dev/null; then
-  echo "Database doesn't exist, creating..."
-  bundle exec rails db:create
-fi
-
-# Run migrations
-bundle exec rails db:migrate
+# Run database migrations
+bundle exec rails db:migrate 2>/dev/null || bundle exec rails db:setup
 
 # Precompile assets
 bundle exec rails assets:precompile
