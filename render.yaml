@@ -17,25 +17,25 @@ services:
         generateValue: true
       - key: DATABASE_URL
         fromDatabase:
-          name: vestiventa-db
-          property: connectionString
+          name: vestiventa
+          property: connectionstring
       - key: DISABLE_DATABASE_ENVIRONMENT_CHECK
         value: "1"
       - key: DB_HOST
         fromDatabase:
-          name: vestiventa-db
+          name: vestiventa
           property: hostname
       - key: DB_NAME
         fromDatabase:
-          name: vestiventa-db
+          name: vestiventa
           property: database
       - key: DB_USER
         fromDatabase:
-          name: vestiventa-db
+          name: vestiventa
           property: user
       - key: DB_PASS
         fromDatabase:
-          name: vestiventa-db
+          name: vestiventa
           property: password
     plan: free
     numInstances: 1
@@ -44,7 +44,7 @@ services:
     healthCheckPath: /up
 
   - type: postgres
-    name: vestiventa-db
+    name: vestiventa
     plan: free
     databaseName: vestiventa_production
     user: vestiventa
