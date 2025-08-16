@@ -2,9 +2,6 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  connect_timeout: 5
-  variables:
-    statement_timeout: 5000
 
 development:
   <<: *default
@@ -20,17 +17,8 @@ test:
   password: postgres
   host: localhost
 
-# Configuración para producción en Render
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
   sslmode: require
-  sslrootcert: <%= ENV['RENDER'] ? '/etc/ssl/certs/ca-certificates.crt' : './config/production.pem' %>
-  # Configuración adicional para manejar la URL de conexión
-  host: <%= ENV['DB_HOST'] %>
-  database: <%= ENV['DB_NAME'] %>
-  username: <%= ENV['DB_USER'] %>
-  password: <%= ENV['DB_PASS'] %>
-  port: 5432
-  # Timeout más largo para entornos de producción
-  connect_timeout: 10
+  sslrootcert: /etc/ssl/certs/ca-certificates.crt
