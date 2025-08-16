@@ -24,8 +24,5 @@ module Vestiventa
 
     # Usar la clave secreta de la variable de entorno o generar una
     config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
-
-    # Deshabilitar el cargado de credenciales
-    config.credentials.content_path = nil
   end
 end
