@@ -2,17 +2,26 @@
 # exit on error
 set -o errexit
 
-# Instalar dependencias
-bundle install
+# Install dependencies
+bundle install --without development test
 
-# Precompilar assets
-bundle exec rake assets:precompile
-bundle exec rake assets:clean
+# Check if database exists and is accessible
+if ! bundle exec rails db:version &> /dev/null; then
+  echo "Database doesn't exist, creating..."
+  bundle exec rails db:create
+fi
 
-# Ejecutar migraciones
-bundle exec rake db:migrate || echo "Falló la migración, continuando..."
+# Run migrations
+bundle exec rails db:migrate
 
-# Limpiar archivos temporales
-bundle exec rake tmp:cache:clear
-bundle exec rake tmp:sockets:clear
-bundle exec rake tmp:pids:clear
+# Precompile assets
+bundle exec rails assets:precompile
+bundle exec rails assets:clean
+
+# Clear tmp
+bundle exec rails tmp:cache:clear
+bundle exec rails tmp:sockets:clear
+bundle exec rails tmp:pids:clear
+
+# Ensure the server.pid is removed if it exists
+rm -f tmp/pids/server.pid

@@ -80,5 +80,11 @@ test:
 #
 production:
   <<: *default
-  # La conexión se manejará completamente a través de DATABASE_URL
-  url: <%= ENV['DATABASE_URL'] %>
+  database: <%= ENV['POSTGRES_DB'] || 'vestiventa_production' %>
+  username: <%= ENV['POSTGRES_USER'] || 'vestiventa' %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  host: <%= ENV['POSTGRES_HOST'] %>
+  port: <%= ENV['POSTGRES_PORT'] || 5432 %>
+  min_messages: warning
+  variables:
+    statement_timeout: 5000
