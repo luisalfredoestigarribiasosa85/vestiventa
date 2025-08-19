@@ -45,7 +45,8 @@ gem "thruster", require: false
 
 gem 'devise'         # Autenticación de usuarios
 gem 'hotwire-rails'  # Para Turbo y Stimulus (interactividad sin JS pesado)
-gem 'tailwindcss-rails' # Para estilos responsive
+gem "tailwindcss-rails", "~> 3.3.1"
+ # Para estilos responsive
 
 
 group :development, :test do
