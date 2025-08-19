@@ -20,7 +20,3 @@ test:
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
-  sslmode: prefer
-  sslcompression: 0
-  ssl_min_protocol_version: 'TLSv1.2'
-  sslrootcert: /etc/ssl/certs/ca-certificates.crt
