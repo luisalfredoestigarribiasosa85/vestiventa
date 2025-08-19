@@ -4,7 +4,7 @@ services:
     runtime: ruby
     plan: free
     buildCommand: './bin/render-build.sh'
-    startCommand: './bin/rails server'
+    startCommand: 'bundle exec puma -C config/puma.rb'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -14,6 +14,10 @@ services:
         sync: false
       - key: WEB_CONCURRENCY
         value: 2
+      - key: RAILS_SERVE_STATIC_FILES
+        value: enabled
+      - key: RAILS_LOG_TO_STDOUT
+        value: enabled
 databases:
   - name: vestiventa-db
     plan: free
