@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
-set -o errexit
+set -euxo pipefail
 
-bundle install
-bin/rails assets:precompile
-bin/rails db:migrate
+ruby -v
+bundle -v
+
+bundle install --without development test
+
+echo "👉 Precompilando assets..."
+RAILS_ENV=production bundle exec rails assets:precompile
+
+echo "👉 Migrando base de datos..."
+RAILS_ENV=production bundle exec rails db:migrate
+
+echo "✅ Build completado"
