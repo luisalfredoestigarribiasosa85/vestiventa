@@ -22,7 +22,7 @@ production:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
 
-  replica:
+  reading:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
     replica: true
