@@ -24,5 +24,6 @@ module Vestiventa
 
     # Usar la clave secreta de la variable de entorno o generar una
     config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
+    config.active_record.automatic_role_switching = false
   end
 end
