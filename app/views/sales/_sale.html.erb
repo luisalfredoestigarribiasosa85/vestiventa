@@ -16,28 +16,28 @@
         </dd>
       </div>
       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Precio</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t("sales.price") %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <div class="font-medium"><%= number_to_currency(sale.price) %></div>
           <% if sale.price != sale.clothing_item.price %>
-            <div class="text-xs text-gray-500 line-through">Precio original: <%= number_to_currency(sale.clothing_item.price) %></div>
+            <div class="text-xs text-gray-500 line-through"><%= t("sales.original_price") %>: <%= number_to_currency(sale.clothing_item.price) %></div>
           <% end %>
         </dd>
       </div>
       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Comprador</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t("sales.buyer") %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <%= sale.buyer_name %>
         </dd>
       </div>
       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Dirección de entrega</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t("sales.delivery_address") %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <%= sale.address %>
         </dd>
       </div>
       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Estado de entrega</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t("sales.delivery_status") %></dt>
         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
           <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
             <%= case sale.delivery_status
@@ -51,7 +51,7 @@
         </dd>
       </div>
       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Fecha de venta</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t("sales.created_at") %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <%= l(sale.created_at, format: :long) %>
         </dd>

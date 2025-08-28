@@ -29,6 +29,15 @@
 
 en:
   hello: "Hello world"
+  unauthorized: "You are not authorized to perform this action."
+  clothing_items:
+    clothing_item_not_found: "Clothing item not found."
+    notices:
+      created: "Clothing item was successfully created."
+      updated: "Clothing item was successfully updated."
+      destroyed: "Clothing item was successfully destroyed."
+    errors:
+      update_failed: "Failed to update clothing item."
   sales:
     delivery_status:
       pending: "Pending"
