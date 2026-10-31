@@ -940,6 +940,12 @@ a.user-chip:focus-visible {
   font-weight: 550;
   letter-spacing: -0.01em;
   line-height: 1.2;
+  padding: 3px 10px;
+  border-radius: 3px;
+  background: rgba(23, 24, 28, 0.06);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -961,16 +967,31 @@ a.user-chip:focus-visible {
 }
 
 .status--pending::before {
-  background: #a97c00;
+  background: var(--muted);
 }
 
 .status--transit::before {
-  background: var(--transit);
+  background: var(--butter);
 }
 
 .status--delivered::before {
   background: #3f6b35;
 }
+
+/* Estados de entrega: legibles y consistentes en cualquier pantalla */
+@media (max-width: 480px) {
+  .status {
+    font-size: 0.78rem;
+    gap: 6px;
+    padding: 2px 8px;
+  }
+  .status::before {
+    width: 6px;
+    height: 6px;
+  }
+}
+  
+
 
 /* --------------------------------------------------------------------------
    Ledger
