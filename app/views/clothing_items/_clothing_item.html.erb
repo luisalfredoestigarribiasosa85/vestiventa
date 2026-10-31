@@ -1,26 +1,51 @@
-<div id="<%= dom_id clothing_item %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Nombre del producto:</strong>
-    <%= clothing_item.name %>
+<article id="<%= dom_id clothing_item %>" class="item-tag">
+  <% if clothing_item.sold? %>
+    <span class="sold-stamp" aria-hidden="true">Vendida</span>
+  <% end %>
+
+  <div class="item-tag__head">
+    <span class="size-tag size-tag--lg <%= "size-tag--sold" if clothing_item.sold? %> <%= size_tag_modifier(clothing_item.size) %>"><%= clothing_item.size %></span>
+    <% if clothing_item.sold? %>
+      <span class="status status--sold">Vendida</span>
+    <% else %>
+      <span class="status status--available">Disponible</span>
+    <% end %>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Tamaño:</strong>
-    <%= clothing_item.size %>
+
+  <div class="item-tag__body">
+    <p class="item-tag__brand">Vestiventa</p>
+    <h2 class="item-tag__name"><%= clothing_item.name %></h2>
+    <p class="item-tag__owner">De <%= clothing_item.owner_name %></p>
+
+    <dl class="item-tag__specs">
+      <div>
+        <dt>Color</dt>
+        <dd>
+          <% if swatch_color(clothing_item.color) %>
+            <span class="swatch" style="--swatch: <%= swatch_color(clothing_item.color) %>" aria-hidden="true"></span>
+          <% else %>
+            <span class="swatch swatch--unknown" aria-hidden="true"></span>
+          <% end %>
+          <%= clothing_item.color %>
+        </dd>
+      </div>
+      <div>
+        <dt>Talle</dt>
+        <dd><%= clothing_item.size %></dd>
+      </div>
+      <div>
+        <dt>Ingreso</dt>
+        <dd><%= clothing_item.created_at.strftime("%d/%m/%Y") %></dd>
+      </div>
+      <div>
+        <dt>Etiqueta</dt>
+        <dd class="mono"><%= clothing_item.id.to_s.rjust(4, "0") %></dd>
+      </div>
+    </dl>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Color:</strong>
-    <%= clothing_item.color %>
+
+  <div class="item-tag__price">
+    <span>Precio</span>
+    <strong><%= guaranies(clothing_item.price) %></strong>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Precio:</strong>
-    <%= clothing_item.price %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Dueño de la Prenda:</strong>
-    <%= clothing_item.owner_name %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Vendido:</strong>
-    <%= clothing_item.sold? ? "Yes" : "No" %>
-  </div>
-</div>
+</article>

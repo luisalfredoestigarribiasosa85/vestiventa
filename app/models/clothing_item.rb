@@ -7,7 +7,7 @@ class ClothingItem < ApplicationRecord
   
   # Scope para obtener prendas disponibles para la venta
   # (que no estén ya vendidas)
-  scope :available_for_sale, -> { where(sold: false) }
+  scope :available_for_sale, -> { where.not(sold: true) }
   
   # Método para marcar una prenda como vendida
   def mark_as_sold!

@@ -1,0 +1,8 @@
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <% variant = type.to_s == "alert" ? "alert" : (type.to_s == "notice" ? "notice" : "info") %>
+  <div class="flash flash--<%= variant %>" role="<%= variant == "alert" ? "alert" : "status" %>">
+    <span class="flash__dot" aria-hidden="true"></span>
+    <p><%= message %></p>
+  </div>
+<% end %>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <title><%= content_for(:title) || "Vestiventa" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Inventario, ventas y entregas para tu tienda de ropa.">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -11,44 +12,24 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
+    <link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "vestiventa", "data-turbo-track": "reload" %>
   </head>
 
   <body>
-  <%= render 'layouts/navbar' %>
-  
-  <!-- Flash Messages -->
-  <% if notice %>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mx-auto mt-4 max-w-md" role="alert">
-      <span class="block sm:inline"><%= notice %></span>
-    </div>
-  <% end %>
-  
-  <% if alert %>
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mx-auto mt-4 max-w-md" role="alert">
-      <span class="block sm:inline"><%= alert %></span>
-    </div>
-  <% end %>
-  
-  <% flash.each do |type, message| %>
-    <% unless type.to_s.in?(['notice', 'alert']) %>
-      <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mx-auto mt-4 max-w-md" role="alert">
-        <span class="block sm:inline"><%= message %></span>
-      </div>
-    <% end %>
-  <% end %>
-  
-  <main class="container mx-auto mt-28 px-5 flex">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <%= render 'layouts/navbar' %>
+
+    <main id="contenido" class="<%= content_for?(:main_class) ? yield(:main_class) : 'site-main' %>">
+      <%= render 'layouts/flash' unless content_for?(:main_class) %>
       <%= yield %>
-  </main>
-  <%= render 'layouts/footer' %>
+    </main>
+
+    <%= render 'layouts/footer' %>
   </body>
 </html>

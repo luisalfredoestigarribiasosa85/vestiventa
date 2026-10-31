@@ -1,47 +1,45 @@
-<nav class="bg-gray p-4 shadow">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16 items-center">
-      <a href="/" class="flex items-center gap-2">
-        <span class="text-black font-extrabold text-2xl tracking-tight">Vestiventa</span>
-      </a>
-      <div class="lg:flex items-center space-x-4">
-        <%= link_to 'Inicio', root_path, class: 'text-black hover:bg-gray-100 px-3 py-2 rounded transition' %>
-        <% unless user_signed_in? %>
-          <%= link_to 'Iniciar Sesión', new_user_session_path, class: 'text-black hover:bg-gray-100 px-3 py-2 rounded transition' %>
-          <%= link_to 'Registro', new_user_registration_path, class: 'bg-black text-white hover:bg-gray-800 px-3 py-2 rounded transition font-semibold' %>
-        <% else %>
-          <%= button_to 'Cerrar Sesión', destroy_user_session_path, method: :delete, form: { style: "display:inline" }, class: 'bg-red-600 text-white hover:bg-red-700 px-3 py-2 rounded transition font-semibold' %>
-        <% end %>
-      </div>
-      <!-- Mobile menu button -->
-      <div class="lg:hidden flex items-center">
-        <button id="mobile-menu-button" class="text-black focus:outline-none" aria-label="Abrir menú">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="sm:hidden hidden px-4 pb-3 bg-black border-t border-gray-200">
-    <div class="flex flex-col space-y-2">
-      <%= link_to 'Inicio', root_path, class: 'text-white hover:bg-gray-800 px-3 py-2 rounded transition' %>
-      <% unless user_signed_in? %>
-        <%= link_to 'Iniciar Sesión', new_user_session_path, class: 'text-black hover:bg-gray-800 px-3 py-2 rounded transition' %>
-        <%= link_to 'Registro', new_user_registration_path, class: 'bg-white text-black hover:bg-gray-200 px-3 py-2 rounded transition font-semibold' %>
+<header class="site-nav">
+  <div class="shell site-nav__inner">
+    <%= link_to root_path, class: "wordmark" do %>
+      <%= render "shared/brand_mark" %>
+      <span>Vestiventa</span>
+    <% end %>
+
+    <nav class="site-nav__links" aria-label="Principal">
+      <%= link_to "Inicio", root_path, class: "nav-link", aria: { current: nav_current("home") } %>
+      <% if user_signed_in? %>
+        <%= link_to "Inventario", clothing_items_path, class: "nav-link", aria: { current: nav_current("clothing_items") } %>
+        <%= link_to "Ventas", sales_path, class: "nav-link", aria: { current: nav_current("sales") } %>
+      <% end %>
+    </nav>
+
+    <div class="site-nav__end">
+      <% if user_signed_in? %>
+        <%= link_to current_user.email, edit_user_registration_path, class: "user-chip", title: "Tu cuenta", aria: { label: "Tu cuenta: #{current_user.email}" } %>
+        <%= link_to "Registrar venta", new_sale_path, class: "btn btn--primary btn--small" %>
+        <%= button_to "Salir", destroy_user_session_path, method: :delete, class: "link-quiet", form: { class: "site-nav__logout" }, aria: { label: "Cerrar sesión" } %>
       <% else %>
-        <%= button_to 'Cerrar Sesión', destroy_user_session_path, method: :delete, form: { style: "display:inline" }, class: 'bg-red-600 text-white hover:bg-red-700 px-3 py-2 rounded transition font-semibold' %>
+        <%= link_to "Iniciar sesión", new_user_session_path, class: "nav-link" %>
+        <%= link_to "Crear cuenta", new_user_registration_path, class: "btn btn--primary btn--small" %>
       <% end %>
     </div>
+
+    <details class="mobile-nav">
+      <summary class="mobile-nav__toggle">Menú</summary>
+      <div class="mobile-nav__panel">
+        <%= link_to "Inicio", root_path, class: "mobile-nav__link" %>
+        <% if user_signed_in? %>
+          <%= link_to "Inventario", clothing_items_path, class: "mobile-nav__link" %>
+          <%= link_to "Ventas", sales_path, class: "mobile-nav__link" %>
+          <%= link_to "Registrar venta", new_sale_path, class: "btn btn--primary btn--small" %>
+          <%= link_to "Tu cuenta", edit_user_registration_path, class: "mobile-nav__link" %>
+          <span class="mobile-nav__email"><%= current_user.email %></span>
+          <%= button_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "link-quiet mobile-nav__signout" %>
+        <% else %>
+          <%= link_to "Iniciar sesión", new_user_session_path, class: "mobile-nav__link" %>
+          <%= link_to "Crear cuenta", new_user_registration_path, class: "btn btn--primary btn--small" %>
+        <% end %>
+      </div>
+    </details>
   </div>
-</nav>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
-    btn.addEventListener('click', function() {
-      menu.classList.toggle('hidden');
-    });
-  });
-</script>
+</header>

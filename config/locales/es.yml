@@ -37,6 +37,8 @@ es:
       destroy: "¿Estás seguro de eliminar esta venta?"
     sale_not_found: "Venta no encontrada"
   clothing_items:
+    errors:
+      update_failed: "No se pudieron guardar los cambios. Revisá los datos marcados."
     notices:
       created: "La prenda se ha creado correctamente."
       updated: "La prenda se ha actualizado correctamente."
@@ -58,3 +60,31 @@ es:
       next: "Siguiente »"
       truncate: "..."
   unauthorized: "No estás autorizado para realizar esta acción."
+  errors:
+    messages:
+      blank: "no puede estar en blanco"
+      taken: "ya está en uso"
+      invalid: "no es válido"
+      confirmation: "no coincide"
+      too_short: "es demasiado corta (mínimo %{count} caracteres)"
+      too_long: "es demasiado larga (máximo %{count} caracteres)"
+      not_a_number: "no es un número"
+      greater_than: "debe ser mayor que %{count}"
+      greater_than_or_equal_to: "debe ser mayor o igual que %{count}"
+  devise:
+    failure:
+      invalid: "Correo o contraseña incorrectos."
+      not_found_in_database: "Correo o contraseña incorrectos."
+      unauthenticated: "Iniciá sesión para continuar."
+      already_authenticated: "Ya iniciaste sesión."
+    sessions:
+      signed_in: "Bienvenido de vuelta."
+      signed_out: "Cerraste sesión."
+    registrations:
+      signed_up: "Tu cuenta está lista."
+      updated: "Actualizaste tu cuenta."
+      destroyed: "Tu cuenta se eliminó."
+    passwords:
+      send_instructions: "Te enviamos un correo con las instrucciones."
+      updated: "Tu contraseña se actualizó."
+      updated_not_active: "Tu contraseña se actualizó."

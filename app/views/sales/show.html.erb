@@ -1,32 +1,21 @@
-<% content_for :title, "Detalle de Venta ##{@sale.id}" %>
+<% content_for :title, "Venta ##{@sale.id}" %>
 
-<div class="w-full">
-  <% if notice.present? %>
-    <div class="mb-6 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200" id="notice">
-      <div class="flex items-center">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        <%= notice %>
-      </div>
-    </div>
-  <% end %>
+<div class="sale-detail">
+  <%= link_to "Volver a ventas", sales_path, class: "link-back" %>
 
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+  <header class="page-head">
     <div>
-      <h1 class="font-bold text-2xl sm:text-3xl">Venta #<%= @sale.id %></h1>
-      <p class="text-sm text-gray-500 mt-1">Detalles completos de la venta</p>
+      <h1>Venta #<%= @sale.id %></h1>
+      <p class="page-head__sub">
+        <%= @sale.clothing_item.name %>, vendida el <%= @sale.created_at.strftime("%d/%m/%Y") %>.
+      </p>
     </div>
-    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-      <%= link_to "Editar venta", edit_sale_path(@sale), class: "w-full sm:w-auto text-center rounded-md px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium" %>
-      <%= link_to "Volver a ventas", sales_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 rounded-md px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium" %>
-      <%= button_to "Eliminar venta", @sale, 
-          method: :delete, 
-          form: { class: "w-full sm:w-auto mt-2 sm:mt-0" },
-          class: "w-full text-center rounded-md px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium cursor-pointer", 
-          data: { turbo_confirm: "¿Estás seguro de eliminar esta venta? Esta acción no se puede deshacer." } %>
+    <div class="page-head__actions">
+      <%= link_to "Editar venta", edit_sale_path(@sale), class: "btn btn--primary" %>
+      <%= link_to "Volver a ventas", sales_path, class: "btn btn--ghost" %>
+      <%= button_to "Eliminar", @sale, method: :delete, class: "btn btn--ghost btn--danger", form: { class: "sale-detail__delete" }, data: { turbo_confirm: "¿Eliminar la venta # #{@sale.id}? Esta acción no se puede deshacer." } %>
     </div>
-  </div>
+  </header>
 
   <%= render @sale %>
 </div>

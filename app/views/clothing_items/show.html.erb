@@ -1,19 +1,63 @@
-<% content_for :title, "Showing clothing item" %>
+<% content_for :title, @clothing_item.name %>
 
-<div class="max-w-4xl mx-auto p-10 bg-white rounded-lg shadow-md">
-  <% if notice.present? %>
-    <div class="mb-5 bg-green-50 p-3 rounded-lg">
-      <p class="text-green-500 font-medium" id="notice"><%= notice %></p>
+<div class="item-detail">
+  <%= link_to "Volver al inventario", clothing_items_path, class: "link-back" %>
+
+  <header class="page-head">
+    <div>
+      <h1><%= @clothing_item.name %></h1>
+      <p class="page-head__sub">
+        Etiqueta <%= @clothing_item.id.to_s.rjust(4, "0") %>, registrada el
+        <%= @clothing_item.created_at.strftime("%d/%m/%Y") %>.
+      </p>
     </div>
-  <% end %>
+    <div class="page-head__actions">
+      <% unless @clothing_item.sold? %>
+        <%= link_to "Vender esta prenda", new_sale_path(clothing_item_id: @clothing_item.id), class: "btn btn--primary" %>
+      <% end %>
+      <%= link_to "Editar", edit_clothing_item_path(@clothing_item), class: "btn btn--ghost" %>
+    </div>
+  </header>
 
-  <h1 class="font-bold text-4xl mb-5">Mostrando Prendas</h1>
+  <div class="detail-layout">
+    <%= render @clothing_item %>
 
-  <%= render @clothing_item %>
+    <aside class="detail-side">
+      <% if @clothing_item.sale.present? %>
+        <% sale = @clothing_item.sale %>
+        <div class="side-panel">
+          <h2>Venta registrada</h2>
+          <dl class="side-list">
+            <div>
+              <dt>Comprador</dt>
+              <dd><%= sale.buyer_name %></dd>
+            </div>
+            <div>
+              <dt>Fecha</dt>
+              <dd class="mono"><%= sale.created_at.strftime("%d/%m/%Y") %></dd>
+            </div>
+            <div>
+              <dt>Entrega</dt>
+              <dd><span class="status <%= delivery_status_css(sale) %>"><%= delivery_status_label(sale) %></span></dd>
+            </div>
+            <div>
+              <dt>Total</dt>
+              <dd class="mono"><%= guaranies(sale.price) %></dd>
+            </div>
+          </dl>
+          <%= link_to "Ver la venta", sale, class: "btn btn--ghost btn--block btn--small" %>
+        </div>
+      <% else %>
+        <div class="side-panel side-panel--sell">
+          <h2>Lista para vender</h2>
+          <p>Cuando registres la venta, la etiqueta se marca como vendida automáticamente.</p>
+          <%= link_to "Registrar venta", new_sale_path(clothing_item_id: @clothing_item.id), class: "btn btn--primary btn--block btn--small" %>
+        </div>
+      <% end %>
 
-  <div class="flex justify-between items-center">
-    <%= link_to "Editar esta prenda", edit_clothing_item_path(@clothing_item), class: "rounded-md px-3 py-2 bg-gray-100 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium" %>
-    <%= link_to "Volver al inventario", clothing_items_path, class: "rounded-md px-3 py-2 bg-gray-100 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium" %>
-    <%= button_to "Eliminar esta prenda", @clothing_item, method: :delete, class: "rounded-md px-3 py-2 bg-red-600 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm font-medium text-white", data: { turbo_confirm: "Are you sure?" } %>
+      <div class="detail-actions">
+        <%= button_to "Eliminar prenda", @clothing_item, method: :delete, class: "link-danger", form: { class: "detail-actions__form" }, data: { turbo_confirm: "¿Eliminar #{@clothing_item.name}? Esta acción no se puede deshacer." } %>
+      </div>
+    </aside>
   </div>
 </div>

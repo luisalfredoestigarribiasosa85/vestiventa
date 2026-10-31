@@ -1,98 +1,111 @@
 <% content_for :title, "Ventas" %>
 
-<% if user_signed_in? %>
-  <div class="w-full">
-    <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-    <% end %>
-
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-      <div>
-        <h1 class="font-bold text-2xl sm:text-3xl">Ventas</h1>
-        <p class="text-sm text-gray-500 mt-1">Ganancias totales: <span class="font-semibold text-green-600"><%= number_to_currency(current_user.total_earnings, unit: 'Gs.') %></span></p>
-      </div>
-      <%= link_to "Nueva Venta", new_sale_path, class: "rounded-md px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-sm" %>
+<div class="sales">
+  <header class="page-head">
+    <div>
+      <h1>Ventas</h1>
+      <p class="page-head__sub">Seguí cada venta hasta la entrega.</p>
     </div>
+    <div class="page-head__actions">
+      <%= link_to "Registrar venta", new_sale_path, class: "btn btn--primary" %>
+    </div>
+  </header>
 
-    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-      <% if @sales.any? %>
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prenda</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comprador</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% @sales.each do |sale| %>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900"><%= sale.clothing_item.name %></div>
-                        <div class="text-sm text-gray-500">Talle: <%= sale.clothing_item.size %></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900"><%= sale.buyer_name %></div>
-                    <div class="text-sm text-gray-500"><%= sale.address %></div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="font-medium"><%= number_to_currency(sale.price, unit: 'Gs.') %></div>
-                    <% if sale.price != sale.clothing_item.price %>
-                      <div class="text-xs text-gray-500 line-through"><%= number_to_currency(sale.clothing_item.price, unit: 'Gs.') %></div>
-                    <% end %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <% status = sale.delivery_status_before_type_cast.to_s == '2' ? 'entregada' : 
-                               sale.delivery_status_before_type_cast.to_s == '1' ? 'en_transito' : 'pendiente' %>
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      <%= case status
-                          when 'pendiente' then 'bg-yellow-100 text-yellow-800'
-                          when 'en_transito' then 'bg-blue-100 text-blue-800'
-                          when 'entregada' then 'bg-green-100 text-green-800'
-                          else 'bg-gray-100 text-gray-800'
-                          end %>">
-                      <%= t("sales.delivery_status.#{status}") %>
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div class="flex items-center justify-end space-x-2">
-                      <%= link_to "Ver", sale, class: "text-blue-600 hover:text-blue-900 cursor-pointer" %>
-                      <%= link_to "Editar", edit_sale_path(sale), class: "text-indigo-600 hover:text-indigo-900 cursor-pointer" %>
-                      <%= button_to "Eliminar", sale, method: :delete, class: "text-red-600 hover:text-red-900 cursor-pointer", 
-                          data: { turbo_confirm: "¿Estás seguro de eliminar esta venta?" } %>
-                    </div>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% else %>
-        <div class="text-center py-10">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" width="200" height="200">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-          </svg>
-          <h3 class="mt-2 text-sm font-medium text-gray-900">No hay ventas registradas</h3>
-          <p class="mt-1 text-sm text-gray-500">Empieza vendiendo una prenda de tu inventario.</p>
-          <%= link_to "Ir al inventario", clothing_items_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
-          <%= link_to "Nueva Venta", new_sale_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+  <dl class="stat-strip">
+    <div>
+      <dt>Ventas acumuladas</dt>
+      <dd><%= guaranies(@total_earnings) %></dd>
+    </div>
+    <div>
+      <dt>Operaciones</dt>
+      <dd><%= @counts[:todas] %></dd>
+    </div>
+    <div>
+      <dt>En tránsito</dt>
+      <dd><%= @counts[:en_transito] %></dd>
+    </div>
+  </dl>
+
+  <div class="filter-bar">
+    <nav class="filters" aria-label="Filtrar ventas">
+      <%= link_to sales_path, class: "filter", aria: { current: @filter == "todas" ? "page" : nil } do %>
+        Todas <span class="filter__count"><%= @counts[:todas] %></span>
+      <% end %>
+      <%= link_to sales_path(estado: "pendientes"), class: "filter", aria: { current: @filter == "pendientes" ? "page" : nil } do %>
+        Pendientes <span class="filter__count"><%= @counts[:pendientes] %></span>
+      <% end %>
+      <%= link_to sales_path(estado: "en_transito"), class: "filter", aria: { current: @filter == "en_transito" ? "page" : nil } do %>
+        En tránsito <span class="filter__count"><%= @counts[:en_transito] %></span>
+      <% end %>
+      <%= link_to sales_path(estado: "entregadas"), class: "filter", aria: { current: @filter == "entregadas" ? "page" : nil } do %>
+        Entregadas <span class="filter__count"><%= @counts[:entregadas] %></span>
+      <% end %>
+    </nav>
+  </div>
+
+  <% if @sales.any? %>
+    <div class="ledger ledger--sales" role="table" aria-label="Ventas">
+      <div class="ledger__head" role="row">
+        <span role="columnheader">Fecha</span>
+        <span role="columnheader">Prenda</span>
+        <span role="columnheader">Comprador</span>
+        <span role="columnheader">Precio</span>
+        <span role="columnheader">Entrega</span>
+        <span role="columnheader" class="sr-only">Acciones</span>
+      </div>
+
+      <% @sales.each do |sale| %>
+        <div class="ledger-row" role="row">
+          <div role="cell">
+            <time class="ledger-row__date" datetime="<%= sale.created_at.iso8601 %>"><%= sale.created_at.strftime("%d/%m/%Y") %></time>
+          </div>
+
+          <div class="ledger-row__item" role="cell">
+            <%= link_to sale.clothing_item.name, sale, class: "ledger-row__name" %>
+            <p class="ledger-row__owner">Talle <%= sale.clothing_item.size %>, <%= sale.clothing_item.color %></p>
+          </div>
+
+          <div class="ledger-row__buyer" role="cell">
+            <p class="ledger-row__buyer-name"><%= sale.buyer_name %></p>
+            <p class="ledger-row__buyer-address"><%= sale.address %></p>
+          </div>
+
+          <div class="ledger-row__price" role="cell">
+            <%= guaranies(sale.price) %>
+            <% if sale.price != sale.clothing_item.price %>
+              <span class="ledger-row__original"><%= guaranies(sale.clothing_item.price) %></span>
+            <% end %>
+          </div>
+
+          <div class="ledger-row__status" role="cell">
+            <span class="status <%= delivery_status_css(sale) %>"><%= delivery_status_label(sale) %></span>
+          </div>
+
+          <div class="ledger-row__actions" role="cell">
+            <%= link_to "Ver", sale, class: "link-quiet", aria: { label: "Ver venta de #{sale.clothing_item.name}" } %>
+            <%= link_to "Editar", edit_sale_path(sale), class: "link-quiet", aria: { label: "Editar venta de #{sale.clothing_item.name}" } %>
+            <%= button_to "Eliminar", sale, method: :delete, class: "link-danger", form: { class: "ledger-row__delete" }, data: { turbo_confirm: "¿Eliminar la venta de #{sale.clothing_item.name}? Esta acción no se puede deshacer." }, aria: { label: "Eliminar venta de #{sale.clothing_item.name}" } %>
+          </div>
         </div>
       <% end %>
     </div>
-  </div>
-<% else %>
-  <div class="text-center py-12">
-    <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">Debes iniciar sesión para ver las ventas</h2>
-    <p class="mt-4 text-gray-600">Inicia sesión para acceder a tu panel de ventas.</p>
-    <div class="mt-6">
-      <%= link_to "Iniciar sesión", new_user_session_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+  <% else %>
+    <div class="empty">
+      <span class="empty__tag" aria-hidden="true"></span>
+      <% if @filter == "pendientes" %>
+        <h2>No hay entregas pendientes</h2>
+        <p>Todo lo que vendiste ya salió o llegó a destino.</p>
+      <% elsif @filter == "en_transito" %>
+        <h2>Nada en tránsito</h2>
+        <p>Cuando una venta salga a entrega, va a aparecer acá.</p>
+      <% elsif @filter == "entregadas" %>
+        <h2>Todavía no hay entregas confirmadas</h2>
+        <p>Actualizá el estado de una venta cuando llegue a destino.</p>
+      <% else %>
+        <h2>Todavía no registraste ventas</h2>
+        <p>Elegí una prenda disponible y registrá la primera venta de tu tienda.</p>
+      <% end %>
+      <%= link_to "Registrar venta", new_sale_path, class: "btn btn--primary" %>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>

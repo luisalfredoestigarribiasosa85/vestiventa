@@ -1,25 +1,41 @@
-<h2>Change your password</h2>
+<% content_for :title, "Cambiar contraseña" %>
+<% content_for :main_class, "auth-main" %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+<div class="auth">
+  <%= render "devise/shared/aside" %>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
-  </div>
+  <section class="auth__form">
+    <div class="auth__inner">
+      <%= render "layouts/flash" %>
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+      <h1>Elegí una contraseña nueva.</h1>
+      <p class="auth__sub">Después de guardarla, vas a poder entrar con ella.</p>
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
+      <div class="auth__form-sheet">
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "auth__fields" }) do |f| %>
+          <%= render "shared/form_errors", object: resource %>
+          <%= f.hidden_field :reset_password_token %>
 
-<%= render "devise/shared/links" %>
+          <div class="field">
+            <%= f.label :password, "Contraseña nueva" %>
+            <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "field__input" %>
+            <% if @minimum_password_length %>
+              <p class="field__hint">Mínimo <%= @minimum_password_length %> caracteres.</p>
+            <% end %>
+          </div>
+
+          <div class="field">
+            <%= f.label :password_confirmation, "Repetí la contraseña" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "field__input" %>
+          </div>
+
+          <%= f.submit "Guardar contraseña", class: "btn btn--primary auth__submit" %>
+        <% end %>
+      </div>
+
+      <p class="auth__alt">
+        <%= link_to "Volver a iniciar sesión", new_session_path(resource_name) %>
+      </p>
+    </div>
+  </section>
+</div>

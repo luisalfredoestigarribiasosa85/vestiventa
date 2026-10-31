@@ -24,5 +24,9 @@ module Vestiventa
 
     # Usar la clave secreta de la variable de entorno o generar una
     config.secret_key_base = ENV["SECRET_KEY_BASE"] || SecureRandom.hex(64)
+
+    # La interfaz está en español; lo que falte cae a inglés.
+    config.i18n.default_locale = :es
+    config.i18n.fallbacks = true
   end
 end

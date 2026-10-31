@@ -1,99 +1,99 @@
-<% content_for :title, "Prendas" %>
+<% content_for :title, "Inventario" %>
 
-<% if user_signed_in? %>
-  <div class="w-full">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-      <div>
-        <h1 class="font-bold text-2xl sm:text-3xl">Inventario de Prendas</h1>
-        <p class="text-sm text-gray-500 mt-1">Administra tu catálogo de prendas disponibles</p>
-      </div>
-      <div class="w-full sm:w-auto">
-        <%= link_to "Nueva Prenda", new_clothing_item_path, class: "w-full text-center rounded-md px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium" %>
-      </div>
+<div class="inventory">
+  <header class="page-head">
+    <div>
+      <h1>Inventario</h1>
+      <p class="page-head__sub">
+        <%= pluralize(@counts[:todas], "prenda registrada", "prendas registradas") %>.
+        <%= @counts[:disponibles] %> disponibles para vender.
+      </p>
     </div>
+    <div class="page-head__actions">
+      <%= link_to "Agregar prenda", new_clothing_item_path, class: "btn btn--primary" %>
+    </div>
+  </header>
 
-    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-      <% if @clothing_items.any? %>
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prenda</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detalles</th>
-                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                <th scope="col" class="relative px-6 py-3">
-                  <span class="sr-only">Acciones</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% @clothing_items.each do |item| %>
-                <tr class="<%= 'bg-gray-50' if item.sold? %> hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900"><%= item.name %></div>
-                        <div class="text-sm text-gray-500"><%= item.owner_name %></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">Talle: <%= item.size %></div>
-                    <div class="text-sm text-gray-500">Color: <%= item.color %></div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-right">
-                    <div class="text-sm font-medium text-gray-900"><%= number_to_currency(item.price, unit: 'Gs.') %></div>
-                    <% if item.sold? %>
-                      <div class="text-xs text-gray-500">Vendida</div>
-                    <% end %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-center">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      <%= item.sold? ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' %>">
-                      <%= item.sold? ? 'Vendida' : 'Disponible' %>
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div class="flex justify-end space-x-2">
-                      <%= link_to "Ver", item, class: "px-3 py-1 text-sm bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50" %>
-                      <% unless item.sold? %>
-                        <%= link_to "Vender", new_sale_path(clothing_item_id: item.id), 
-                            class: "px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded-md" %>
-                        <%= link_to "Editar", edit_clothing_item_path(item), 
-                            class: "px-3 py-1 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-md" %>
-                      <% end %>
-                      <%= button_to "Eliminar", item, 
-                          method: :delete, 
-                          class: "px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-md",
-                          data: { turbo_confirm: "¿Estás seguro de eliminar esta prenda?" } %>
-                    </div>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% else %>
-        <div class="text-center py-12">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="200" height="200">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          <h3 class="mt-2 text-sm font-medium text-gray-900">No hay prendas registradas</h3>
-          <p class="mt-1 text-sm text-gray-500">Empieza agregando una nueva prenda a tu inventario.</p>
-          <div class="mt-6">
-            <%= link_to "Nueva Prenda", new_clothing_item_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+  <div class="filter-bar">
+    <nav class="filters" aria-label="Filtrar inventario">
+      <%= link_to clothing_items_path, class: "filter", aria: { current: @filter == "todas" ? "page" : nil } do %>
+        Todas <span class="filter__count"><%= @counts[:todas] %></span>
+      <% end %>
+      <%= link_to clothing_items_path(estado: "disponibles"), class: "filter", aria: { current: @filter == "disponibles" ? "page" : nil } do %>
+        Disponibles <span class="filter__count"><%= @counts[:disponibles] %></span>
+      <% end %>
+      <%= link_to clothing_items_path(estado: "vendidas"), class: "filter", aria: { current: @filter == "vendidas" ? "page" : nil } do %>
+        Vendidas <span class="filter__count"><%= @counts[:vendidas] %></span>
+      <% end %>
+    </nav>
+  </div>
+
+  <% if @clothing_items.any? %>
+    <div class="ledger" role="table" aria-label="Prendas">
+      <div class="ledger__head" role="row">
+        <span role="columnheader" class="sr-only">Talle</span>
+        <span role="columnheader">Prenda</span>
+        <span role="columnheader">Color</span>
+        <span role="columnheader">Precio</span>
+        <span role="columnheader">Estado</span>
+        <span role="columnheader" class="sr-only">Acciones</span>
+      </div>
+
+      <% @clothing_items.each do |item| %>
+        <div class="ledger-row" role="row">
+          <div role="cell">
+            <span class="size-tag <%= "size-tag--sold" if item.sold? %> <%= size_tag_modifier(item.size) %>"><%= item.size %></span>
+          </div>
+
+          <div class="ledger-row__item" role="cell">
+            <%= link_to item, class: "ledger-row__name" do %><%= item.name %><% end %>
+            <p class="ledger-row__owner">De <%= item.owner_name %></p>
+          </div>
+
+          <div class="ledger-row__meta" role="cell">
+            <% if swatch_color(item.color) %>
+              <span class="swatch" style="--swatch: <%= swatch_color(item.color) %>" aria-hidden="true"></span>
+            <% else %>
+              <span class="swatch swatch--unknown" aria-hidden="true"></span>
+            <% end %>
+            <span><%= item.color.presence || "Sin color" %></span>
+          </div>
+
+          <div class="ledger-row__price" role="cell"><%= guaranies(item.price) %></div>
+
+          <div class="ledger-row__status" role="cell">
+            <% if item.sold? %>
+              <span class="status status--sold">Vendida</span>
+            <% else %>
+              <span class="status status--available">Disponible</span>
+            <% end %>
+          </div>
+
+          <div class="ledger-row__actions" role="cell">
+            <%= link_to "Ver", item, class: "link-quiet", aria: { label: "Ver #{item.name}" } %>
+            <% unless item.sold? %>
+              <%= link_to "Vender", new_sale_path(clothing_item_id: item.id), class: "link-action", aria: { label: "Vender #{item.name}" } %>
+              <%= link_to "Editar", edit_clothing_item_path(item), class: "link-quiet", aria: { label: "Editar #{item.name}" } %>
+            <% end %>
+            <%= button_to "Eliminar", item, method: :delete, class: "link-danger", form: { class: "ledger-row__delete" }, data: { turbo_confirm: "¿Eliminar #{item.name}? Esta acción no se puede deshacer." }, aria: { label: "Eliminar #{item.name}" } %>
           </div>
         </div>
       <% end %>
     </div>
-  </div>
-<% else %>
-  <div class="text-center py-12">
-    <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">Debes iniciar sesión para ver las prendas</h2>
-    <p class="mt-4 text-gray-600">Inicia sesión para acceder a tu inventario de prendas.</p>
-    <div class="mt-6">
-      <%= link_to "Iniciar sesión", new_user_session_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+  <% else %>
+    <div class="empty">
+      <span class="empty__tag" aria-hidden="true"></span>
+      <% if @filter == "disponibles" %>
+        <h2>No hay prendas disponibles</h2>
+        <p>Todo lo que registraste ya se vendió. Agregá la próxima prenda para seguir.</p>
+      <% elsif @filter == "vendidas" %>
+        <h2>Todavía no vendiste nada</h2>
+        <p>Cuando registres una venta, la prenda va a aparecer acá.</p>
+      <% else %>
+        <h2>Tu inventario está vacío</h2>
+        <p>Empezá etiquetando la primera prenda: nombre, talle, color, precio y dueño.</p>
+      <% end %>
+      <%= link_to "Agregar prenda", new_clothing_item_path, class: "btn btn--primary" %>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>

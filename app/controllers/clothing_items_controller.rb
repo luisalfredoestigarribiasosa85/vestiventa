@@ -5,7 +5,19 @@ class ClothingItemsController < ApplicationController
 
   # GET /clothing_items or /clothing_items.json
   def index
-    @clothing_items = current_user.clothing_items.order(created_at: :desc)
+    base = current_user.clothing_items.order(created_at: :desc)
+    @filter = params[:estado].presence_in(%w[disponibles vendidas]) || "todas"
+    @counts = {
+      todas: base.count,
+      disponibles: base.available_for_sale.count,
+      vendidas: base.where(sold: true).count
+    }
+    @clothing_items =
+      case @filter
+      when "disponibles" then base.available_for_sale
+      when "vendidas" then base.where(sold: true)
+      else base
+      end
   end
 
   # GET /clothing_items/1 or /clothing_items/1.json

@@ -6,7 +6,22 @@ class SalesController < ApplicationController
 
   # GET /sales or /sales.json
   def index
-    @sales = current_user.sales.includes(:clothing_item).order(created_at: :desc)
+    base = current_user.sales.includes(:clothing_item).recent
+    @filter = params[:estado].presence_in(%w[pendientes en_transito entregadas]) || "todas"
+    @counts = {
+      todas: base.count,
+      pendientes: base.delivery_status_pending.count,
+      en_transito: base.delivery_status_in_transit.count,
+      entregadas: base.delivery_status_delivered.count
+    }
+    @sales =
+      case @filter
+      when "pendientes" then base.delivery_status_pending
+      when "en_transito" then base.delivery_status_in_transit
+      when "entregadas" then base.delivery_status_delivered
+      else base
+      end
+    @total_earnings = current_user.total_earnings
   end
 
   # GET /sales/1 or /sales/1.json
@@ -16,6 +31,13 @@ class SalesController < ApplicationController
   # GET /sales/new
   def new
     @sale = current_user.sales.new
+    return if params[:clothing_item_id].blank?
+
+    item = current_user.clothing_items.available_for_sale.find_by(id: params[:clothing_item_id])
+    if item
+      @sale.clothing_item = item
+      @sale.price = item.price
+    end
   end
 
   # GET /sales/1/edit
@@ -79,9 +101,13 @@ class SalesController < ApplicationController
       redirect_to sales_path, alert: t(".sale_not_found") unless @sale
     end
 
-    # Set available clothing items for the select dropdown
+    # Set available clothing items for the select dropdown.
+    # When editing, keep the item already attached to the sale in the list.
     def set_available_items
-      @available_items = current_user.clothing_items.available_for_sale
+      @available_items = current_user.clothing_items.available_for_sale.order(:name).to_a
+      if @sale&.persisted? && @sale.clothing_item && !@available_items.include?(@sale.clothing_item)
+        @available_items << @sale.clothing_item
+      end
     end
 
     # Only allow a list of trusted parameters through.

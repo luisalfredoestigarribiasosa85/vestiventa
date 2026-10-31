@@ -1,18 +1,12 @@
-<% content_for :title, "Editar Venta" %>
+<% content_for :title, "Editar venta ##{@sale.id}" %>
 
-<div class="w-full">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-    <div>
-      <h1 class="font-bold text-2xl sm:text-3xl">Editar Venta</h1>
-      <p class="text-sm text-gray-500 mt-1">Actualiza los detalles de la venta</p>
-    </div>
-    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-      <%= link_to "Ver detalle", @sale, class: "w-full sm:w-auto text-center rounded-md px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium" %>
-      <%= link_to "Volver a ventas", sales_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 rounded-md px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium" %>
-    </div>
-  </div>
+<div class="form-page">
+  <%= link_to "Volver a la venta", @sale, class: "link-back" %>
 
-  <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-    <%= render "form", sale: @sale %>
-  </div>
+  <header class="form-head">
+    <h1>Editar la venta</h1>
+    <p>Actualizá el comprador, la dirección o el estado de entrega de la venta #<%= @sale.id %>.</p>
+  </header>
+
+  <%= render "form", sale: @sale %>
 </div>

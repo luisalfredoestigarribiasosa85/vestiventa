@@ -1,48 +1,51 @@
-<%= form_with(model: clothing_item, class: "max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md space-y-6") do |form| %>
-  <% if clothing_item.errors.any? %>
-    <div id="error_explanation" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
-      <h2 class="font-bold mb-2"><%= pluralize(clothing_item.errors.count, "error") %> no permitieron guardar esta prenda:</h2>
-      <ul class="list-disc ml-6">
-        <% clothing_item.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with(model: clothing_item, class: "form-sheet") do |form| %>
+  <%= render "shared/form_errors", object: clothing_item %>
 
-  <div class="grid grid-cols-1 gap-6">
-    <div>
-      <%= form.label :name, "Nombre del Producto", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_field :name, class: "block w-full rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition #{clothing_item.errors[:name].any? ? 'border-red-400' : 'border-gray-300'}" %>
+  <div class="field-grid">
+    <div class="field field--full field--hero">
+      <%= form.label :name, "Nombre de la prenda" %>
+      <%= form.text_field :name, class: "field__input", placeholder: "Campera de jean", autofocus: !clothing_item.persisted?, aria: { invalid: clothing_item.errors[:name].any? } %>
     </div>
 
-    <div>
-      <%= form.label :size, "Tamaño", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_field :size, class: "block w-full rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition #{clothing_item.errors[:size].any? ? 'border-red-400' : 'border-gray-300'}" %>
+    <div class="field">
+      <%= form.label :size, "Talle" %>
+      <%= form.text_field :size, class: "field__input", placeholder: "M, 38, Único", aria: { invalid: clothing_item.errors[:size].any? } %>
     </div>
 
-    <div>
-      <%= form.label :color, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_field :color, class: "block w-full rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition #{clothing_item.errors[:color].any? ? 'border-red-400' : 'border-gray-300'}" %>
+    <div class="field">
+      <%= form.label :color, "Color" %>
+      <%= form.text_field :color, class: "field__input", placeholder: "Azul", aria: { invalid: clothing_item.errors[:color].any? } %>
     </div>
 
-    <div>
-      <%= form.label :price, "Precio", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.number_field :price, class: "block w-full rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition #{clothing_item.errors[:price].any? ? 'border-red-400' : 'border-gray-300'}" %>
+    <div class="field">
+      <%= form.label :price, "Precio" %>
+      <div class="money-field">
+        <span class="money-field__unit" aria-hidden="true">Gs.</span>
+        <%= form.number_field :price, class: "field__input", min: 0, step: 1, placeholder: "320000", aria: { invalid: clothing_item.errors[:price].any? } %>
+      </div>
+      <p class="field__hint">En guaraníes, sin decimales.</p>
     </div>
 
-    <div>
-      <%= form.label :owner_name, "Dueño de la prenda", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_field :owner_name, class: "block w-full rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition #{clothing_item.errors[:owner_name].any? ? 'border-red-400' : 'border-gray-300'}" %>
+    <div class="field">
+      <%= form.label :owner_name, "Dueño de la prenda" %>
+      <%= form.text_field :owner_name, class: "field__input", placeholder: "Ana Giménez", aria: { invalid: clothing_item.errors[:owner_name].any? } %>
     </div>
 
-    <div class="flex items-center space-x-2">
-      <%= form.checkbox :sold, class: "h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" %>
-      <%= form.label :sold, "Vendido", class: "text-sm font-medium text-gray-700" %>
+    <div class="field field--full">
+      <div class="check">
+        <%= form.check_box :sold %>
+        <div>
+          <%= form.label :sold, "Marcar como vendida" %>
+          <p class="check__hint">Se marca sola cuando registrás la venta. Usalo solo si necesitás corregir el estado.</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="mt-6">
-    <%= form.submit "Crear Prenda", class: "w-full rounded-md px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition" %>
+  <div class="form-actions">
+    <%= link_to "Cancelar", clothing_item.persisted? ? clothing_item_path(clothing_item) : clothing_items_path, class: "link-quiet" %>
+    <div class="form-actions__main">
+      <%= form.submit(clothing_item.persisted? ? "Guardar cambios" : "Agregar al inventario", class: "btn btn--primary") %>
+    </div>
   </div>
 <% end %>
