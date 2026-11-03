@@ -3,10 +3,12 @@ class Sale < ApplicationRecord
   belongs_to :user
 
   # Definir los estados de entrega
+  # La columna es `string`, así que los valores deben ser strings para que
+  # la lectura (cast) y la serialización coincidan con lo guardado en la base.
   enum :delivery_status, {
-    pending: 0,
-    in_transit: 1,
-    delivered: 2
+    pending: "pending",
+    in_transit: "in_transit",
+    delivered: "delivered"
   }, default: :pending, prefix: true
 
   # Validaciones
